@@ -1,6 +1,7 @@
 #ifndef _COMMANDS_H
 #define _COMMANDS_H
 #include <iostream>
+#include <stdio.h> 
 #include <list>
 #include <unistd.h> 
 #include <stdio.h>
@@ -18,5 +19,33 @@ int ExeComp(char* lineSize);
 int BgCmd(char* lineSize, void* jobs);
 int ExeCmd(void* jobs, char* lineSize, char* cmdString);
 void ExeExternal(char *args[MAX_ARG], char* cmdString);
+
+typedef struct _Var
+{
+	char* name;
+	char* value;
+}Var;
+
+
+class job
+{
+	public:
+		job(int pid, running_status status);
+		int GetPid() const {return pid;}
+		double GetTime() const {return (double)(start_time - time(NULL))}
+		
+	protected:
+		int pid;
+		time_t start_time;
+		char * job_name;
+}
+
+job::job(int pid, char* name):pid(pid)
+{
+	start_time = time(NULL); 
+	job_name = name;
+}
+
+
 #endif
 

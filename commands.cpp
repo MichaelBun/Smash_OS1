@@ -8,10 +8,11 @@
 // Returns: 0 - success,1 - failure
 //**************************************************************************************
 
+
 using std::list;
 
 
-int ExeCmd(void* jobs, char* lineSize, char* cmdString, list<Var>& var_list)
+int ExeCmd(void* jobs, char* lineSize, char* cmdString, list<Var>& var_list, list<job>& job_list)
 {
 	char* cmd; 
 	char* args[MAX_ARG];
@@ -134,7 +135,7 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString, list<Var>& var_list)
 		}
 		else //Print only one
 		{
-			for(std::list<Var*>::iterator i = var_list.begin(); i<=var_list.end(); var++)
+			for(std::list<Var*>::iterator i = var_list.begin(); i<=var_list.end(); i++)
 			{
 				if(!strcmp((*i)->name,args[1]))
 				{
@@ -149,12 +150,20 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString, list<Var>& var_list)
 	
 	else if (!strcmp(cmd, "jobs")) 
 	{
- 		
+		int counter = 1;
+ 		for(std::list<Var*>::iterator i = var_list.begin(); i<=var_list.end(); i++)
+		{
+			int pid = (*i).GetPid();
+			double time = (*i).GetTime();
+			char* name = (*i).GetName();
+			printf("[%d] %s : %d %f secs",counter,name,pid,time);
+		}
 	}
 	/*************************************************/
 	else if (!strcmp(cmd, "showpid")) 
 	{
-		
+		int my_pid = (int)getpid();
+		printf("smash pid is %d", my_pid);
 	}
 	/*************************************************/
 	else if (!strcmp(cmd, "fg")) 
