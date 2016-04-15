@@ -120,7 +120,7 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString, list<Var>& var_list, lis
 				var_list.remove(i);
 			}
 		}
-		printf("smash error: > “%s” - variable not found",args[1]);
+		printf("smash error: > “%s” - variable not found\n",args[1]);
 	}
 	/*************************************************/
 		
@@ -130,7 +130,7 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString, list<Var>& var_list, lis
 		{
 			for(std::list<Var*>::iterator i = var_list.begin(); i<=var_list.end(); var++)
 			{
-				printf("%s := %s",(*i)->name,(*i)->value);
+				printf("%s := %s\n",(*i)->name,(*i)->value);
 			}
 		}
 		else //Print only one
@@ -139,7 +139,7 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString, list<Var>& var_list, lis
 			{
 				if(!strcmp((*i)->name,args[1]))
 				{
-					printf("%s := %s",(*i)->name,(*i)->value);
+					printf("%s := %s\n",(*i)->name,(*i)->value);
 				}
 			}
 		}
@@ -156,7 +156,7 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString, list<Var>& var_list, lis
 			int pid = (*i).GetPid();
 			double time = (*i).GetTime();
 			char* name = (*i).GetName();
-			printf("[%d] %s : %d %f secs",counter,name,pid,time);
+			printf("[%d] %s : %d %f secs\n",counter,name,pid,time);
 		}
 	}
 	/*************************************************/
@@ -183,7 +183,7 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString, list<Var>& var_list, lis
 	/*************************************************/
 	else // external command
 	{
- 		ExeExternal(args, cmdString);
+ 		ExeExternal(args, cmdString, job_list);
 	 	return 0;
 	}
 	if (illegal_cmd == TRUE)
@@ -199,7 +199,7 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString, list<Var>& var_list, lis
 // Parameters: external command arguments, external command string
 // Returns: void
 //**************************************************************************************
-void ExeExternal(char *args[MAX_ARG], char* cmdString)
+void ExeExternal(char *args[MAX_ARG], char* cmdString, list<job>& job_list)
 {
 	int pID;
     	switch(pID = fork()) 
@@ -213,19 +213,15 @@ void ExeExternal(char *args[MAX_ARG], char* cmdString)
         	case 0 :
                 	// Child Process
                		setpgrp();
-					
-			        // Add your code here (execute an external command)
-					
-					/* 
-					your code
-					*/
+					if(BgCmd(args,job_list) == -1)
+					{
+						execvp(args[0],args_passing);
+					}
+					exit(1);
 			
 			default:
-                	// Add your code here
 					
-					/* 
-					your code
-					*/
+			
 	}
 }
 //**************************************************************************************
@@ -254,21 +250,27 @@ int ExeComp(char* lineSize)
 // Parameters: command string, pointer to jobs
 // Returns: 0- BG command -1- if not
 //**************************************************************************************
-int BgCmd(char* lineSize, void* jobs)
+int BgCmd(char *args[MAX_ARG], list<job>& job_list)
 {
 
-	char* Command;
-	char* delimiters = " \t\n";
-	char *args[MAX_ARG];
-	if (lineSize[strlen(lineSize)-2] == '&')
+	bool bg_condition = false;
+	for(int i=1; i<MAX_ARGS, i++)
 	{
-		lineSize[strlen(lineSize)-2] = '\0';
-		// Add your code here (execute a in the background)
-					
-		/* 
-		your code
-		*/
-		
+		if(!strcmp(args[i],"&")){bg_condition = true;}
+	}
+	if (bg_condition=true)
+	{
+		command_line[strlen(command_line)-2] = '\0';
+		int my_pid = (int)getpid();
+		job new_job = new job(my_pid,args[0]);
+		char *args_passing[MAX_ARG-2] = args
+		for(int i=1; i<MAX_ARGS; i++)
+		{
+			args_passing[i-1] = args[i];
+		}
+		execvp(args[0],args_passing);
+		return 1;
+		exit(1);
 	}
 	return -1;
 }
