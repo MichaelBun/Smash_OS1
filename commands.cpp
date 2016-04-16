@@ -273,6 +273,57 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString, list<Var>& var_list, lis
 	/*************************************************/
 	else if (!strcmp(cmd, "quit"))
 	{
+		time_t start_time[job_list.length()];
+		if(args[1] =="") //regular quit
+		{
+			exit(0);
+		}
+		else if(args[1] == "kill")
+		{
+			int counter_SetTime = 1;
+			for(std::list<job>::iterator i = job_list.begin(); i<=job_list.end(); i++)
+			{
+				if(kill((*i).GetPid(),SIGTERM)==-1)
+				{
+					printf("Error with sending signal\n");
+				}
+				else
+				{
+					start_time[counter_SetTime] = time(NULL);
+				}
+				counter_SetTime++;
+			}
+			while(1) //Now check if 5 seconds past, and delete whatever is not needed
+			{
+				int counter_delete=1; //For start time array
+				for(std::list<job>::iterator i = job_list.begin(); i<=job_list.end(); i++)
+				{
+					if(waitpid((*i).GetPid(),WNOHANG)) // This job ended.
+					{
+						free((*i).GetName());
+						job_list.remove(i);
+					}
+					else if((double)(start_time[counter_delete] - time(NULL))>5) // 5 Seconds past
+					{
+						if(kill((*i).GetPid(),SIGKILL)==-1) //Kill it
+						{
+							printf("Error with sending signal\n");
+						}
+						else //Remove from list
+						{
+							free((*i).GetName());
+							job_list.remove(i);
+						}
+					}
+					counter_delete++;
+				}
+				
+				if(job_list.empty()) //true if list is empty
+				{
+					exit(0);
+				}
+			}
+		}
    		
 	} 
 	/*************************************************/
