@@ -203,19 +203,71 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString, list<Var>& var_list, lis
 							job_list.remove(i);
 						}
 					}
+					break;
 				}
 			}
 		}
 	} 
 	/*************************************************/
 	
-	else if (!strcmp(cmd, "fg")) 
+	else if (!strcmp(cmd, "fg")) //NEED TO ADD LIST REMOVAL
 	{
-		
+		int job_num = atoi(args[1]);
+		int counter = 1;
+		for(std::list<job>::iterator i = job_list.begin(); i<=job_list.end(); i++)
+			{
+				if(counter == job_num)
+				{
+					int job_pid = (*i).GetPid();
+					if((*i).GetStatus() == suspended)
+					{
+						//Move to foreground
+						if(kill(job_pid,SIGCONT) == -1) //it was suspended
+						{
+							printf("Error continueing suspended in foreground\n");
+						}
+						else
+						{
+							free((*i).GetName());
+							job_list.remove(i);
+							waitpid(job_pid,NULL,WUNTRACED); // wait untill we done	
+						}
+					}
+					else //it was running in the background
+					{
+						free((*i).GetName());
+						job_list.remove(i);
+						waitpid(job_pid,NULL,WUNTRACED); // wait untill we done
+					}
+					break;
+				}
+			}
 	} 
 	/*************************************************/
 	else if (!strcmp(cmd, "bg")) 
 	{
+		int job_num = atoi(args[1]);
+		int counter = 1;
+		for(std::list<job>::iterator i = job_list.begin(); i<=job_list.end(); i++)
+			{
+				if(counter == job_num)
+				{
+					int job_pid = (*i).GetPid();
+					if((*i).GetStatus() == suspended)
+					{
+						//Move to background with status working
+						if(kill(job_pid,SIGCONT) == -1) //it was suspended
+						{
+							printf("Error continueing suspended in foreground\n");
+						}
+						else
+						{
+							(*i).ChangeStatus(working);
+						}
+					}
+					break;
+				}
+			}
   		
 	}
 	/*************************************************/
