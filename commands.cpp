@@ -150,7 +150,6 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString, list<Var>& var_list, lis
 	
 	else if (!strcmp(cmd, "jobs")) 
 	{
-		int counter = 1;
  		for(std::list<Var*>::iterator i = var_list.begin(); i<=var_list.end(); i++)
 		{
 			int pid = (*i).GetPid();
@@ -166,6 +165,50 @@ int ExeCmd(void* jobs, char* lineSize, char* cmdString, list<Var>& var_list, lis
 		printf("smash pid is %d", my_pid);
 	}
 	/*************************************************/
+	else if (!strcmp(cmd, "kill"))
+	{
+		int job_num = atoi(args[2]);
+   		if(job_num>job_list.length()) // job does not exist
+		{
+			printf("smash error: > kill %s – job does not exist",args[2]);
+		}
+		else
+		{
+			int system_call;
+			system_call = (-1)*atoi(args[1]);
+			int counter = 1;
+			for(std::list<job>::iterator i = job_list.begin(); i<=job_list.end(); i++)
+			{
+				if(counter == job_num ) // This is the one we need
+				{
+					if(kill((*i).GetPid(),system_call) == -1) // we failed in sending the sig
+					{
+						printf("smash error: > kill %s – cannot send signal",args[2]);
+					}
+					else
+					{
+						if(system_call == SIGSTOP || system_call == SIGTSTP) //We want to suspend
+						{
+							jobStatus new_status = suspended; //This process is now suspended
+							(*i).ChangeStatus(new_status);
+						}
+						else if(system_call == SIGCONT)
+						{
+							jobStatus new_status = working; //This process is now suspended
+							(*i).ChangeStatus(new_status);
+						}
+						else if(system_call == SIGKILL || system_call == SIGQUIT) // We want to delete the item from the job list
+						{
+							free((*i).GetName());
+							job_list.remove(i);
+						}
+					}
+				}
+			}
+		}
+	} 
+	/*************************************************/
+	
 	else if (!strcmp(cmd, "fg")) 
 	{
 		

@@ -15,6 +15,7 @@
 #define MAX_LINE_SIZE 80
 #define MAX_ARG 20
 typedef enum { FALSE , TRUE } bool;
+typedef enum {suspended, working } jobStatus;
 int ExeComp(char* lineSize);
 int BgCmd(char* lineSize, void* jobs);
 int ExeCmd(void* jobs, char* lineSize, char* cmdString);
@@ -32,15 +33,18 @@ class job
 	public:
 		job(int pid, running_status status);
 		int GetPid() const {return pid;}
-		double GetTime() const {return (double)(start_time - time(NULL))}
+		double GetTime() const {return (double)(start_time - time(NULL));}
+		char* GetName() const {return job_name;}
+		void ChangeStatus(jobStatus new_status) {job_status = new_status;}
 		
 	protected:
 		int pid;
 		time_t start_time;
 		char * job_name;
+		jobStatus job_status;
 }
 
-job::job(int pid, char* name):pid(pid)
+job::job(int pid, char* name):pid(pid),job_status(working)
 {
 	start_time = time(NULL); 
 	job_name = name;
