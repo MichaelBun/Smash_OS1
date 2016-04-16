@@ -213,11 +213,15 @@ void ExeExternal(char *args[MAX_ARG], char* cmdString, list<job>& job_list)
         	case 0 :
                 	// Child Process
                		setpgrp();
-					if(BgCmd(args,job_list) == -1)
+					if(ExeComp(cmdString) == -1) //Complicated command
 					{
-						execvp(args[0],args_passing);
+						
 					}
-					exit(1);
+					elseif(BgCmd(args,job_list) == -1) //Do regular in the background
+					{
+						execvp(args[0],args_passing); //Do regular in the foreground
+					}
+					exit(-1);
 			
 			default:
 					
@@ -230,7 +234,7 @@ void ExeExternal(char *args[MAX_ARG], char* cmdString, list<job>& job_list)
 // Parameters: command string
 // Returns: 0- if complicated -1- if not
 //**************************************************************************************
-int ExeComp(char* lineSize)
+int ExeComp(char* lineSize, char* args[MAX_ARG])
 {
 	char ExtCmd[MAX_LINE_SIZE+2];
 	char *args[MAX_ARG];
@@ -241,6 +245,40 @@ int ExeComp(char* lineSize)
 		/* 
 		your code
 		*/
+		
+		bool bg_condition = false;
+		for(int i=1; i<MAX_ARGS, i++)
+		{
+			if(!strcmp(args[i],"&")){bg_condition = true;}
+		}
+		if (bg_condition=true) // Run complicated in bg
+		{
+			//command_line[strlen(command_line)-2] = '\0';
+			int my_pid = (int)getpid();
+			job new_job = new job(my_pid,args[0]);
+			char* new_command[MAX_ARG];
+			command[0] = "csh";
+			command[1] = "-f";
+			command[2] = "-c";
+			command[3] = lineSize;
+			command[4] = NULL; 
+			execvp(command[0],command);
+			return 1;
+			exit(1);
+		}
+		else //run in fg
+		{
+			//command_line[strlen(command_line)-2] = '\0';
+			char* new_command[MAX_ARG];
+			command[0] = "csh";
+			command[1] = "-f";
+			command[2] = "-c";
+			command[3] = lineSize;
+			command[4] = NULL; 
+			execvp(command[0],command);
+			return 1;
+			exit(1);
+		}			
 	} 
 	return -1;
 }
@@ -252,7 +290,6 @@ int ExeComp(char* lineSize)
 //**************************************************************************************
 int BgCmd(char *args[MAX_ARG], list<job>& job_list)
 {
-
 	bool bg_condition = false;
 	for(int i=1; i<MAX_ARGS, i++)
 	{
@@ -260,15 +297,10 @@ int BgCmd(char *args[MAX_ARG], list<job>& job_list)
 	}
 	if (bg_condition=true)
 	{
-		command_line[strlen(command_line)-2] = '\0';
+		//command_line[strlen(command_line)-2] = '\0';
 		int my_pid = (int)getpid();
 		job new_job = new job(my_pid,args[0]);
-		char *args_passing[MAX_ARG-2] = args
-		for(int i=1; i<MAX_ARGS; i++)
-		{
-			args_passing[i-1] = args[i];
-		}
-		execvp(args[0],args_passing);
+		execvp(args[0],args);
 		return 1;
 		exit(1);
 	}
