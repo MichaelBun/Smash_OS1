@@ -13,6 +13,7 @@ main file. This file contains the main function of smash
 #define MAX_LINE_SIZE 80
 #define MAXARGS 20
 
+using std::vector;
 using std::list;
 
 char* L_Fg_Cmd;

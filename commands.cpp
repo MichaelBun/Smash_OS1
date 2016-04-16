@@ -283,37 +283,39 @@ int BgCmd(char *linesize, list<job>& job_list)
 	if(linesize[strlen(linesize)-2] == "&")
 	{
 		linesize[strlen(linesize)-2] = "\0";
-		if (Command == NULL) //Building the args
-			return 0;
-		args[0] = Command;
+		/*if (Command == NULL) //Building the args
+			return 0; */
 		for (i = 1; i<MAX_ARG; i++)
 		{
 			args[i] = strtok(NULL, delimiters);
 		}
+		args[0] = Command;
+
 			int pID;
     	switch(pID = fork()) 
-	{
-    		case -1: 
-					// Add your code here (error)
-					printf("Error\n");
-					exit(1);
-					/* 
-					your code
-					*/
-        	case 0 :
-                	// Child Process
-               		setpgrp();
-					int my_pID = (int)getpid();
-					job new_job = new job(my_pID, args[0]);
-					job_list.push_back(new_job);
-					execvp(args[0],args);
-					printf("Error\n");
-					exit(1);
-			
-			default:
-					break;
-			
+			{
+					case -1: 
+							// Add your code here (error)
+							printf("Error\n");
+							exit(1);
+							/* 
+							your code
+							*/
+					case 0 :
+							// Child Process
+							setpgrp();
+							int my_pID = (int)getpid();
+							job new_job = new job(my_pID, args[0]);
+							job_list.push_back(new_job);
+							execvp(args[0],args);
+							printf("Error\n");
+							exit(1);
+					
+					default:
+							break;
+					
+			}
 	}
-	}
+	return -1;
 }
 
