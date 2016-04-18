@@ -2,7 +2,7 @@
 CC = g++
 CFLAGS = -g -Wall
 CCLINK = $(CC)
-OBJS = smash.O commands.O signals.O
+OBJS = smash.o commands.o signals.o
 RM = rm -f
 # Creating the  executable
 smash: $(OBJS)
