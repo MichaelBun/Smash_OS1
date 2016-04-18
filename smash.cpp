@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 					// background command	
 	 	if(!BgCmd(lineSize, &job_list)) continue; 
 					// built in commands
-		ExeCmd(jobs, lineSize, cmdString, &var_list, &job_list);
+		ExeCmd(lineSize, cmdString, &var_list, &job_list);
 		
 		/* initialize for next line read*/
 		lineSize[0]='\0';
