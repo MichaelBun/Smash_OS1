@@ -153,9 +153,9 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 	{
  		for(std::list<Var*>::iterator i = var_list.begin(); i!=var_list.end(); i++)
 		{
-			int pid = i.GetPid();
-			double time = i.GetTime();
-			char* name = i.GetName();
+			int pid = i->GetPid();
+			double time = i->GetTime();
+			char* name = i->GetName();
 			printf("[%d] %s : %d %f secs\n",counter,name,pid,time);
 		}
 	}
