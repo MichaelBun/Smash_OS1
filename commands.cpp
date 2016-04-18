@@ -118,7 +118,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 				free((*i)->name);
 				free((*i)->value);
 				free((*i));
-				job_list.erase(i);
+				var_list.erase(i);
 			}
 		}
 		printf("smash error: > “%s” - variable not found\n",args[1]);
