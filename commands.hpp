@@ -41,7 +41,7 @@ class job
 		time_t start_time;
 		char * job_name;
 		jobStatus job_status;
-}
+};
 
 job::job(int pid, char* name):pid(pid),job_status(working)
 {
