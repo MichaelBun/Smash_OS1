@@ -200,11 +200,11 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 							jobStatus new_status = working; //This process is now suspended
 							(*i).ChangeStatus(new_status);
 						}
-					/*	else if(system_call == SIGKILL || system_call == SIGQUIT) // We want to delete the item from the job list
+						else if(system_call == SIGKILL || system_call == SIGQUIT) // We want to delete the item from the job list
 						{
-							free((*i).GetName());
+							delete((*i).GetName());
 							job_list.remove(*i);
-						} */
+						} 
 					}
 					break;
 				}
