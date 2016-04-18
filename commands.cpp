@@ -12,7 +12,7 @@
 using std::list;
 
 
-int ExeCmd(void* jobs, char* lineSize, char* cmdString, list<Var>& var_list, list<job>& job_list)
+int ExeCmd(char* lineSize, char* cmdString, list<Var>& var_list, list<job>& job_list)
 {
 	char* cmd; 
 	char* args[MAX_ARG];
