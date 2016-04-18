@@ -232,14 +232,14 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 						else
 						{
 							free((*i).GetName());
-							job_list.remove(i);
+							job_list.remove(*i);
 							waitpid(job_pid,NULL,WUNTRACED); // wait untill we done	
 						}
 					}
 					else //it was running in the background
 					{
 						free((*i).GetName());
-						job_list.remove(i);
+						job_list.remove(*i);
 						waitpid(job_pid,NULL,WUNTRACED); // wait untill we done
 					}
 					break;
@@ -304,7 +304,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 					if(waitpid((*i).GetPid(),WNOHANG)) // This job ended.
 					{
 						free((*i).GetName());
-						job_list.remove(i);
+						job_list.remove(*i);
 					}
 					else if((double)(start_time[counter_delete] - time(NULL))>5) // 5 Seconds past
 					{
@@ -315,7 +315,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 						else //Remove from list
 						{
 							free((*i).GetName());
-							job_list.remove(i);
+							job_list.remove(*i);
 						}
 					}
 					counter_delete++;
