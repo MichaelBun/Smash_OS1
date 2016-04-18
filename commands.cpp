@@ -17,19 +17,23 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 {
 	char* cmd; 
 	char* args[MAX_ARG];
-	char* pwd;
 	char* delimiters = " \t\n";  
 	int i = 0, num_arg = 0;
 	// ADDED BY US
+
 	char* fwd; //Former Working Directory
+	char* pwd; //Current Working Dir
 	getcwd(fwd,MAX_LINE_SIZE); //At the start they are the same
 	getcwd(pwd,MAX_LINE_SIZE);
+
 	// ADDED BY US
 	bool illegal_cmd = false; // illegal command
-    	cmd = strtok(lineSize, delimiters);
-	if (cmd == NULL)
+
+	cmd = strtok(lineSize, delimiters); //command
+	if (cmd == NULL) perror("Can't read the command");
 		return 0; 
    	args[0] = cmd;
+
 	for (i=1; i<MAX_ARG; i++)
 	{
 		args[i] = strtok(NULL, delimiters); 
@@ -111,16 +115,19 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 		
 	else if (!strcmp(cmd, "unset")) 
 	{
+		int flag=-1;
  		for(std::list<Var*>::iterator i = var_list.begin(); i!=var_list.end(); i++)
 		{
 			if(!strcmp((*i)->name,args[1]))
 			{
+				flag=0; //var found
 				free((*i)->name);
 				free((*i)->value);
 				free((*i));
 				var_list.erase(i);
 			}
 		}
+ 		if(flag!=0)
 		printf("smash error: > “%s” - variable not found\n",args[1]);
 	}
 	/*************************************************/
@@ -144,6 +151,8 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 				}
 			}
 		}
+
+		//TODO what if varname not found??
  		
 	}
 	/*************************************************/
@@ -231,19 +240,24 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 						}
 						else
 						{
+							GPid = job_pid ;
 							free(i->GetName());
 							job_list.erase(i);
 							waitpid(job_pid,NULL,WUNTRACED); // wait untill we done	
+							GPid = -1;
 						}
 					}
 					else //it was running in the background
 					{
+						GPid=job_pid ;
 						free((*i).GetName());
 						job_list.erase(i);
 						waitpid(job_pid,NULL,WUNTRACED); // wait untill we done
+						GPid = -1;
 					}
 					break;
 				}
+				counter++;
 			}
 	} 
 	/*************************************************/
@@ -355,7 +369,7 @@ void ExeExternal(char *args[MAX_ARG], char* cmdString, list<job>& job_list)
 	{
     		case -1: 
 					// Add your code here (error)
-					printf("Error\n");
+					perror("Error\n");
 					exit(1);
 					/* 
 					your code
@@ -368,7 +382,9 @@ void ExeExternal(char *args[MAX_ARG], char* cmdString, list<job>& job_list)
 					exit(1);
 			
 			default:
+					GPid = pID;
 					waitpid(pID,NULL,WUNTRACED);
+					GPid = -1;
 					break;
 			
 	}
@@ -410,7 +426,9 @@ int ExeComp(char* lineSize)
 					exit(1);
 			
 			default:
+					GPid = pID;
 					waitpid(pID,NULL,WUNTRACED);
+					GPid = -1;
 					break;
 			
 	}

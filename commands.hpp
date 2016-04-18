@@ -12,12 +12,15 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <errno.h>
+
 #define MAX_LINE_SIZE 80
 #define MAX_ARG 20
 using std::list;
+
 typedef enum {suspended, working } jobStatus;
 
-
+//Globals
+extern int GPid; //to know which process is in foreground
 
 typedef struct _Var
 {
@@ -29,9 +32,9 @@ typedef struct _Var
 class job
 {
 	public:
-		job(int pid, jobStatus status, char* name)
+		job(int _pid, jobStatus status, char* name)
 		{
-			pid = pid;
+			pid = _pid;
 			job_status = status;
 			start_time = time(NULL); 
 			job_name = name;

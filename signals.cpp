@@ -9,10 +9,6 @@
 
 
 
-//Globals
-extern int GPid; //to know which process is in foreground 
-
-
 
 
 //********************************************
