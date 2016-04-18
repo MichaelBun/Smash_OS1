@@ -16,10 +16,8 @@
 #define MAX_ARG 20
 using std::list;
 typedef enum {suspended, working } jobStatus;
-int ExeComp(char* lineSize);
-int BgCmd(char* lineSize, list<job>& job_list);
-int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job_list);
-void ExeExternal(char *args[MAX_ARG], char* cmdString, list<job>& job_list);
+
+
 
 typedef struct _Var
 {
@@ -56,6 +54,13 @@ class job
 	job_name = name;
 }
 */
+
+
+/*Function Declarations*/
+int ExeComp(char* lineSize);
+int BgCmd(char* lineSize, list<job>& job_list);
+int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job_list);
+void ExeExternal(char *args[MAX_ARG], char* cmdString, list<job>& job_list);
 
 
 #endif
