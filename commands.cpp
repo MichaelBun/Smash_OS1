@@ -118,7 +118,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 				free((*i)->name);
 				free((*i)->value);
 				free((*i));
-				var_list.remove(i);
+				var_list.remove(*i);
 			}
 		}
 		printf("smash error: > “%s” - variable not found\n",args[1]);
@@ -151,7 +151,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 	
 	else if (!strcmp(cmd, "jobs")) 
 	{
- 		for(std::list<Var*>::iterator i = var_list.begin(); i!=var_list.end(); i++)
+ 		for(std::list<job>::iterator i = var_list.begin(); i!=var_list.end(); i++)
 		{
 			int pid = i->GetPid();
 			double time = i->GetTime();
