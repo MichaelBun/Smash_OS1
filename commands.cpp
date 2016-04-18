@@ -239,7 +239,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 					else //it was running in the background
 					{
 						free((*i).GetName());
-						ob_list.erase(i);
+						job_list.erase(i);
 						waitpid(job_pid,NULL,WUNTRACED); // wait untill we done
 					}
 					break;
