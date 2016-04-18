@@ -203,7 +203,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 						else if(system_call == SIGKILL || system_call == SIGQUIT) // We want to delete the item from the job list
 						{
 							free((*i).GetName());
-							job_list.remove(i);
+							job_list.remove(*i);
 						}
 					}
 					break;

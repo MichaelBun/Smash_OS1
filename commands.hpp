@@ -39,6 +39,7 @@ class job
 		int GetPid() const {return pid;}
 		double GetTime() const {return (double)(start_time - time(NULL));}
 		char* GetName() const {return job_name;}
+		jobStatus GetStatus() const {return job_status;}
 		void ChangeStatus(jobStatus new_status) {job_status = new_status;}
 		
 	protected:
