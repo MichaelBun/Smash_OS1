@@ -151,7 +151,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 	
 	else if (!strcmp(cmd, "jobs")) 
 	{
- 		for(std::list<job>::iterator i = var_list.begin(); i!=var_list.end(); i++)
+ 		for(std::list<job>::iterator i = job_list.begin(); i!=job_list.end(); i++)
 		{
 			int pid = i->GetPid();
 			double time = i->GetTime();
