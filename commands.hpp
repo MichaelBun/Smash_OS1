@@ -14,7 +14,6 @@
 #include <errno.h>
 #define MAX_LINE_SIZE 80
 #define MAX_ARG 20
-typedef enum { FALSE , TRUE } bool;
 typedef enum {suspended, working } jobStatus;
 int ExeComp(char* lineSize);
 int BgCmd(char* lineSize, void* jobs);
@@ -31,7 +30,7 @@ typedef struct _Var
 class job
 {
 	public:
-		job(int pid, running_status status);
+		job(int pid, jobStatus status);
 		int GetPid() const {return pid;}
 		double GetTime() const {return (double)(start_time - time(NULL));}
 		char* GetName() const {return job_name;}
