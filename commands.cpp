@@ -429,9 +429,11 @@ int BgCmd(char *linesize, list<job>& job_list)
 	char* Command;
 	char* delimeters = " \t\n";
 	char* args[MAX_ARG];
-	if(linesize[strlen(linesize)-2] == (char)"&")
+	char ampercent = "&";
+	char empty = "\0";
+	if(linesize[strlen(linesize)-2] == ampercent)
 	{
-		linesize[strlen(linesize)-2] = (char)"\0";
+		linesize[strlen(linesize)-2] = empty;
 		/*if (Command == NULL) //Building the args
 			return 0; */
 		for (int i = 1; i<MAX_ARG; i++)
