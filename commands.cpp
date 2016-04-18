@@ -111,7 +111,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 		
 	else if (!strcmp(cmd, "unset")) 
 	{
- 		for(std::list<Var*>::iterator i = var_list.begin(); i<var_list.end(); i++)
+ 		for(std::list<Var*>::iterator i = var_list.begin(); i!=var_list.end(); i++)
 		{
 			if(!strcmp((*i)->name,args[1]))
 			{
@@ -129,14 +129,14 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 	{
 		if(!strcmp(args[1],"")) //Print all
 		{
-			for(std::list<Var*>::iterator i = var_list.begin(); i<var_list.end(); i++)
+			for(std::list<Var*>::iterator i = var_list.begin(); i!=var_list.end(); i++)
 			{
 				printf("%s := %s\n",(*i)->name,(*i)->value);
 			}
 		}
 		else //Print only one
 		{
-			for(std::list<Var*>::iterator i = var_list.begin(); i<var_list.end(); i++)
+			for(std::list<Var*>::iterator i = var_list.begin(); i!=var_list.end(); i++)
 			{
 				if(!strcmp((*i)->name,args[1]))
 				{
@@ -151,7 +151,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 	
 	else if (!strcmp(cmd, "jobs")) 
 	{
- 		for(std::list<Var*>::iterator i = var_list.begin(); i<var_list.end(); i++)
+ 		for(std::list<Var*>::iterator i = var_list.begin(); i!=var_list.end(); i++)
 		{
 			int pid = (*i).GetPid();
 			double time = (*i).GetTime();
@@ -178,7 +178,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 			int system_call;
 			system_call = (-1)*atoi(args[1]);
 			int counter = 1;
-			for(std::list<job>::iterator i = job_list.begin(); i<job_list.end(); i++)
+			for(std::list<job>::iterator i = job_list.begin(); i!=job_list.end(); i++)
 			{
 				if(counter == job_num ) // This is the one we need
 				{
@@ -215,7 +215,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 	{
 		int job_num = atoi(args[1]);
 		int counter = 1;
-		for(std::list<job>::iterator i = job_list.begin(); i<job_list.end(); i++)
+		for(std::list<job>::iterator i = job_list.begin(); i!=job_list.end(); i++)
 			{
 				if(counter == job_num)
 				{
@@ -249,7 +249,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 	{
 		int job_num = atoi(args[1]);
 		int counter = 1;
-		for(std::list<job>::iterator i = job_list.begin(); i<job_list.end(); i++)
+		for(std::list<job>::iterator i = job_list.begin(); i!=job_list.end(); i++)
 			{
 				if(counter == job_num)
 				{
@@ -282,7 +282,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 		else if(args[1] == "kill")
 		{
 			int counter_SetTime = 1;
-			for(std::list<job>::iterator i = job_list.begin(); i<job_list.end(); i++)
+			for(std::list<job>::iterator i = job_list.begin(); i!=job_list.end(); i++)
 			{
 				if(kill((*i).GetPid(),SIGTERM)==-1)
 				{
@@ -297,7 +297,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 			while(1) //Now check if 5 seconds past, and delete whatever is not needed
 			{
 				int counter_delete=1; //For start time array
-				for(std::list<job>::iterator i = job_list.begin(); i<job_list.end(); i++)
+				for(std::list<job>::iterator i = job_list.begin(); i!=job_list.end(); i++)
 				{
 					if(waitpid((*i).GetPid(),WNOHANG)) // This job ended.
 					{
