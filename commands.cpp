@@ -151,12 +151,14 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 	
 	else if (!strcmp(cmd, "jobs")) 
 	{
+		int counter=1;
  		for(std::list<job>::iterator i = job_list.begin(); i!=job_list.end(); i++)
 		{
 			int pid = i->GetPid();
 			double time = i->GetTime();
 			char* name = i->GetName();
 			printf("[%d] %s : %d %f secs\n",counter,name,pid,time);
+			counter++;
 		}
 	}
 	/*************************************************/
@@ -169,7 +171,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 	else if (!strcmp(cmd, "kill"))
 	{
 		int job_num = atoi(args[2]);
-   		if(job_num>job_list.length()) // job does not exist
+   		if(job_num>job_list.size()) // job does not exist
 		{
 			printf("smash error: > kill %s – job does not exist",args[2]);
 		}
@@ -274,7 +276,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 	/*************************************************/
 	else if (!strcmp(cmd, "quit"))
 	{
-		time_t start_time[job_list.length()];
+		time_t start_time[job_list.size()];
 		if(args[1] =="") //regular quit
 		{
 			exit(0);
