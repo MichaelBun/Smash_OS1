@@ -27,7 +27,7 @@ typedef struct _Var
 }Var;
 
 
-class _job
+class job
 {
 	public:
 		job(int pid, jobStatus status);
@@ -41,9 +41,9 @@ class _job
 		time_t start_time;
 		char * job_name;
 		jobStatus job_status;
-} job;
+};
 
-job::job(int pid, char* name):pid(pid),job_status(working)
+job(int pid, char* name):pid(pid),job_status(working)
 {
 	start_time = time(NULL); 
 	job_name = name;
