@@ -436,7 +436,7 @@ int BgCmd(char *linesize, list<job>& job_list)
 			return 0; */
 		for (int i = 1; i<MAX_ARG; i++)
 		{
-			args[i] = strtok(NULL, delimetersters);
+			args[i] = strtok(NULL, delimeters);
 		}
 		args[0] = Command;
 
@@ -455,7 +455,7 @@ int BgCmd(char *linesize, list<job>& job_list)
 							setpgrp();
 							int my_pID = (int)getpid();
 							jobStatus status = working;
-							char* procc_name = malloc(sizeof(char)*strlen(args[0]);
+							char* procc_name = malloc(sizeof(char)*strlen(args[0]));
 							job new_job = job(my_pID,status, procc_name);
 							job_list.push_back(new_job);
 							execvp(args[0],args);
