@@ -446,14 +446,14 @@ int BgCmd(char *linesize, list<job>& job_list)
     	switch(pID = fork()) 
 			{
 					case -1: 
-							// Add your code here (error)
+						{// Add your code here (error)
 							printf("Error\n");
 							exit(1);
 							/* 
 							your code
-							*/
+						*/}		
 					case 0 :
-							// Child Process
+							{// Child Process
 							setpgrp();
 							int my_pID = (int)getpid();
 							jobStatus status = working;
@@ -462,7 +462,7 @@ int BgCmd(char *linesize, list<job>& job_list)
 							job_list.push_back(new_job);
 							execvp(args[0],args);
 							printf("Error\n");
-							exit(1);
+						}		exit(1);
 					
 					default:
 							break;
