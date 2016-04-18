@@ -231,7 +231,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 						}
 						else
 						{
-							free((*i).GetName());
+							free(i->GetName());
 							job_list.remove(*i);
 							waitpid(job_pid,NULL,WUNTRACED); // wait untill we done	
 						}
