@@ -1,6 +1,7 @@
 //		commands.c
 //********************************************
 #include "commands.hpp"
+#include <sys/stat.h>
 //********************************************
 // function name: ExeCmd
 // Description: interperts and executes built-in commands
@@ -24,7 +25,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 	getcwd(fwd,MAX_LINE_SIZE); //At the start they are the same
 	getcwd(pwd,MAX_LINE_SIZE);
 	// ADDED BY US
-	bool illegal_cmd = FALSE; // illegal command
+	bool illegal_cmd = false; // illegal command
     	cmd = strtok(lineSize, delimiters);
 	if (cmd == NULL)
 		return 0; 
