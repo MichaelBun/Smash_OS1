@@ -118,7 +118,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 				free((*i)->name);
 				free((*i)->value);
 				free((*i));
-				var_list.remove(*i);
+				job_list.erase(i);
 			}
 		}
 		printf("smash error: > “%s” - variable not found\n",args[1]);
@@ -203,7 +203,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 						else if(system_call == SIGKILL || system_call == SIGQUIT) // We want to delete the item from the job list
 						{
 							delete((*i).GetName());
-							job_list.remove(*i);
+							job_list.erase(i);
 						} 
 					}
 					break;
@@ -232,7 +232,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 						else
 						{
 							free(i->GetName());
-							job_list.remove(*i);
+							job_list.erase(i);
 							waitpid(job_pid,NULL,WUNTRACED); // wait untill we done	
 						}
 					}
@@ -304,7 +304,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 					if(waitpid((*i).GetPid(),NULL,WNOHANG)) // This job ended.
 					{
 						free((*i).GetName());
-						job_list.remove(*i);
+						job_list.erase(i);
 					}
 					else if((double)(start_time[counter_delete] - time(NULL))>5) // 5 Seconds past
 					{
@@ -315,7 +315,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 						else //Remove from list
 						{
 							free((*i).GetName());
-							job_list.remove(*i);
+							job_list.erase(i);
 						}
 					}
 					counter_delete++;
