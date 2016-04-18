@@ -431,9 +431,9 @@ int BgCmd(char *linesize, list<job>& job_list)
 	char* args[MAX_ARG];
 	char* ampercent = strdup("&");
 	char* empty = strdup("\0");
-	if(linesize[strlen(linesize)-2] == ampercent)
+	if(linesize[strlen(linesize)-2] == *ampercent)
 	{
-		linesize[strlen(linesize)-2] = empty;
+		linesize[strlen(linesize)-2] = *empty;
 		/*if (Command == NULL) //Building the args
 			return 0; */
 		for (int i = 1; i<MAX_ARG; i++)
