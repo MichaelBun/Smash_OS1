@@ -301,7 +301,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 				int counter_delete=1; //For start time array
 				for(std::list<job>::iterator i = job_list.begin(); i!=job_list.end(); i++)
 				{
-					if(waitpid((*i).GetPid(),WNOHANG)) // This job ended.
+					if(waitpid((*i).GetPid(),NULL,WNOHANG)) // This job ended.
 					{
 						free((*i).GetName());
 						job_list.remove(*i);
@@ -387,7 +387,7 @@ int ExeComp(char* lineSize)
 	new_command[0] = "csh";
 	new_command[1] = "-f";
 	new_command[2] = "-c";
-	new_command[3] = linesize;
+	new_command[3] = lineSize;
 	new_command[4] = NULL;
 	
     if ((strstr(lineSize, "|")) || (strstr(lineSize, "<")) || (strstr(lineSize, ">")) || (strstr(lineSize, "*")) || (strstr(lineSize, "?")) || (strstr(lineSize, ">>")) || (strstr(lineSize, "|&")))
