@@ -30,13 +30,9 @@ int main(int argc, char *argv[])
 
 	
 	//signal declaretions
-	//NOTE: the signal handlers and the function/s that sets the handler should be found in siganls.c
-	 /* add your code here */
-	
-	/************************************/
-	//NOTE: the signal handlers and the function/s that sets the handler should be found in siganls.c
-	//set your signal handlers here
-	/* add your code here */
+
+	sighandler(SIGTSTP, &ctrl_z); //TODO check parameters. do we need "&"?????
+	sighandler(SIGINT, &ctrl_c);
 
 	/************************************/
 
