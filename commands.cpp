@@ -427,7 +427,7 @@ int ExeComp(char* lineSize)
 int BgCmd(char *linesize, list<job>& job_list)
 {
 	char* Command;
-	char* delimeters = " \t\n";
+	char* delimeters = strdup(" \t\n");
 	char* args[MAX_ARG];
 	char* ampercent = strdup("&");
 	char* empty = strdup("\0");
