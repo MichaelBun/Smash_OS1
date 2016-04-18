@@ -434,9 +434,9 @@ int BgCmd(char *linesize, list<job>& job_list)
 		linesize[strlen(linesize)-2] = "\0";
 		/*if (Command == NULL) //Building the args
 			return 0; */
-		for (i = 1; i<MAX_ARG; i++)
+		for (int i = 1; i<MAX_ARG; i++)
 		{
-			args[i] = strtok(NULL, delimiters);
+			args[i] = strtok(NULL, delimetersters);
 		}
 		args[0] = Command;
 
