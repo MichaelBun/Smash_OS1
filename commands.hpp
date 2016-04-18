@@ -30,7 +30,7 @@ typedef struct _Var
 class job
 {
 	public:
-		job(int pid, jobStatus status);
+		job(int pid, jobStatus status, char* name);
 		int GetPid() const {return pid;}
 		double GetTime() const {return (double)(start_time - time(NULL));}
 		char* GetName() const {return job_name;}
@@ -43,7 +43,7 @@ class job
 		jobStatus job_status;
 };
 
-job(int pid, char* name):pid(pid),job_status(working)
+job(int pid, jobStatus status, char* name):pid(pid),job_status(working)
 {
 	start_time = time(NULL); 
 	job_name = name;
