@@ -8,7 +8,7 @@
 // Returns: 0 - success,1 - failure
 //**************************************************************************************
 
-
+using namespace std;
 using std::list;
 
 
@@ -16,11 +16,11 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 {
 	char* cmd; 
 	char* args[MAX_ARG];
-	char* pwd[MAX_LINE_SIZE];
+	char* pwd;
 	char* delimiters = " \t\n";  
 	int i = 0, num_arg = 0;
 	// ADDED BY US
-	char* fwd[MAX_LINE_SIZE]; //Former Working Directory
+	char* fwd; //Former Working Directory
 	getcwd(fwd,MAX_LINE_SIZE); //At the start they are the same
 	getcwd(pwd,MAX_LINE_SIZE);
 	// ADDED BY US
