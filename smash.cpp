@@ -8,8 +8,8 @@ main file. This file contains the main function of smash
 #include <stdlib.h>
 #include <string.h>
 #include <signal.h>
-#include "commands.h"
-#include "signals.h"
+#include "commands.hpp"
+#include "signals.hpp"
 #define MAX_LINE_SIZE 80
 #define MAXARGS 20
 

@@ -5,7 +5,7 @@
 /*******************************************/
 /* Name: handler_cntlc
    Synopsis: handle the Control-C */
-#include "signals.h"
+#include "signals.hpp"
 
 
 
