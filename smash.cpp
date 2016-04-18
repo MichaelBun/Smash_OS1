@@ -13,6 +13,7 @@ main file. This file contains the main function of smash
 #define MAX_LINE_SIZE 80
 #define MAXARGS 20
 
+
 using std::list;
 
 char* L_Fg_Cmd;
@@ -54,7 +55,7 @@ int main(int argc, char *argv[])
 					// perform a complicated Command
 		if(!ExeComp(lineSize)) continue; 
 					// background command	
-	 	if(!BgCmd(lineSize, jobs)) continue; 
+	 	if(!BgCmd(lineSize, job_list)) continue; 
 					// built in commands
 		ExeCmd(jobs, lineSize, cmdString, var_list, job_list);
 		
