@@ -14,6 +14,7 @@
 #include <errno.h>
 #define MAX_LINE_SIZE 80
 #define MAX_ARG 20
+using std::list;
 typedef enum {suspended, working } jobStatus;
 int ExeComp(char* lineSize);
 int BgCmd(char* lineSize, list<job>& job_list);
