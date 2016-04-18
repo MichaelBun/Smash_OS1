@@ -454,7 +454,8 @@ int BgCmd(char *linesize, list<job>& job_list)
 							// Child Process
 							setpgrp();
 							int my_pID = (int)getpid();
-							job new_job = new job(my_pID, args[0]);
+							jobStatus status = working;
+							job new_job = new job(my_pID,status, args[0]);
 							job_list.push_back(new_job);
 							execvp(args[0],args);
 							printf("Error\n");

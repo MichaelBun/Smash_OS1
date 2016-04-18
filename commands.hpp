@@ -29,10 +29,10 @@ typedef struct _Var
 class job
 {
 	public:
-		job(int pid, jobStatus status, char* name):(jobStatus = working)
+		job(int pid, jobStatus status, char* name)
 		{
 			pid = pid;
-			job_status = working;
+			job_status = status;
 			start_time = time(NULL); 
 			job_name = name;
 		}
