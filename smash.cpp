@@ -57,11 +57,11 @@ int main(int argc, char *argv[])
 		//cmdString[strlen(lineSize)-1]=NULL; //SEGMENTATION FAULT
 					// perform a complicated Command
 		printf("%s",cmdString);
-		if(!ExeComp(lineSize)) continue; 
+		if(!ExeComp(&lineSize)) continue; 
 					// background command	
-	 	if(!BgCmd(lineSize, job_list)) continue; 
+	 	if(!BgCmd(&lineSize, job_list)) continue; 
 					// built in commands
-		ExeCmd(lineSize, var_list, job_list);
+		ExeCmd(&lineSize, var_list, job_list);
 		
 		/* initialize for next line read*/
 		lineSize[0]='\0';
