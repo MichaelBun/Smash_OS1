@@ -27,7 +27,7 @@ int GPid;
 //**************************************************************************************
 int main(int argc, char *argv[])
 {
-    char cmdString[MAX_LINE_SIZE]; 	   
+    char* cmdString[MAX_LINE_SIZE]; 	   
 
 	
 	//signal declaretions
