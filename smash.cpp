@@ -20,6 +20,7 @@ char* L_Fg_Cmd;
 char lineSize[MAX_LINE_SIZE]; 
 list<Var*> var_list;
 list<job> job_list;
+int GPid;
 //**************************************************************************************
 // function name: main
 // Description: main function of smash. get command from user and calls command functions
