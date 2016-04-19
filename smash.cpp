@@ -51,7 +51,8 @@ int main(int argc, char *argv[])
     	{
 	 	printf("smash > ");
 		fgets(lineSize, MAX_LINE_SIZE, stdin);
-		strcpy(cmdString, lineSize);    	
+		strcpy(cmdString, lineSize);    
+		printf("%s",lineSize);
 		cmdString[strlen(lineSize)-1]='\0';
 					// perform a complicated Command
 		if(!ExeComp(lineSize)) continue; 
