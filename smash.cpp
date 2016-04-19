@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
 		printf("%s",lineSize);
 		cmdString[strlen(lineSize)-1]='\0';
 					// perform a complicated Command
+		printf("%s",cmdString);
 		if(!ExeComp(lineSize)) continue; 
 					// background command	
 	 	if(!BgCmd(lineSize, job_list)) continue; 
