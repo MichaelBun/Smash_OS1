@@ -29,7 +29,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 	char* pwd; //Current Working Dir
 	getcwd(fwd,MAX_LINE_SIZE); //At the start they are the same
 	getcwd(pwd,MAX_LINE_SIZE);
-
+	printf("%s\n %s\n %s\n",delimeters,fwd,cwd);
 	// ADDED BY US
 	bool illegal_cmd = false; // illegal command
 
