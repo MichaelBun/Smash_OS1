@@ -15,7 +15,7 @@ using std::list;
 using std::string;
 
 
-int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job_list)
+int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list)
 {
 	char* cmd; 
 	char* args[MAX_ARG];
@@ -350,12 +350,12 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 	/*************************************************/
 	else // external command
 	{
- 		ExeExternal(args, cmdString, job_list);
+ 		ExeExternal(args, job_list);
 	 	return 0;
 	}
 	if (illegal_cmd == true)
 	{
-		printf("smash error: > \"%s\"\n", cmdString);
+		printf("smash error: > \"%s\"\n", lineSize);
 		return 1;
 	}
     return 0;
@@ -366,7 +366,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 // Parameters: external command arguments, external command string
 // Returns: void
 //**************************************************************************************
-void ExeExternal(char *args[MAX_ARG], char* cmdString, list<job>& job_list)
+void ExeExternal(char *args[MAX_ARG], list<job>& job_list)
 {
 	int pID;
     	switch(pID = fork()) 
@@ -407,13 +407,10 @@ int ExeComp(char* lineSize)
 	string _new_command_0 = "csh"; //So C++ wont be mad about using char*
 	string _new_command_1 = "-f";
 	string _new_command_2 = "-c";
-	new_command[0] = (char*)malloc(sizeof(char)*_new_command_0.length());
 	strcpy(new_command[0],_new_command_0.c_str());
 	printf("%s", new_command[0]);
 	strcpy(new_command[1],_new_command_1.c_str());
 	strcpy(new_command[2],_new_command_2.c_str());
-
-
 	new_command[3] = lineSize;
 	new_command[4] = NULL;
 	
