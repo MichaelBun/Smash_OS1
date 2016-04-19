@@ -11,7 +11,7 @@
 //**************************************************************************************
 
 using namespace std;
-using std::list
+using std::list;
 using std::string;
 
 
@@ -20,7 +20,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 	char* cmd; 
 	char* args[MAX_ARG];
 	string delim_ = " \t\n"
-	char* delimiters = delim.c_str();  
+	char* delimiters = delim_.c_str();  
 	int i = 0, num_arg = 0;
 	// ADDED BY US
 
