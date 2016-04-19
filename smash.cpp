@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
 		strcpy(cmdString, lineSize);    
 		printf("%s\n%s\n",lineSize,cmdString);
 		printf("%d\n",strlen(cmdString));
-		cmdString[strlen(cmdString)-1]='\0'; //SEGMENTATION FAULT
+		cmdString[0]='\0'; //SEGMENTATION FAULT
 					// perform a complicated Command
 		printf("%s",cmdString);
 		if(!ExeComp(lineSize)) continue; 
