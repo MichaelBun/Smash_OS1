@@ -19,7 +19,7 @@ int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job
 {
 	char* cmd; 
 	char* args[MAX_ARG];
-	string delim_ = " \t\n"
+	string delim_ = " \t\n";
 	char* delimiters = delim_.c_str();  
 	int i = 0, num_arg = 0;
 	// ADDED BY US
@@ -406,9 +406,9 @@ int ExeComp(char* lineSize)
 	string _new_command_0 = "csh"; //So C++ wont be mad about using char*
 	string _new_command_1 = "-f";
 	string _new_command_2 = "-c";
-	new_command[0] = _new_command_0.c_str();
-	new_command[1] = _new_command_1.c_str();
-	new_command[2] = _new_command_2.c_str();
+	new_command[0] = strcpy(_new_command_0.c_str());
+	new_command[1] = strcpy(_new_command_1.c_str());
+	new_command[2] = strcpy(_new_command_2.c_str());
 	new_command[3] = lineSize;
 	new_command[4] = NULL;
 	
