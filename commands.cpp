@@ -350,7 +350,7 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list)
 	/*************************************************/
 	else // external command
 	{
- 		ExeExternal(args, &job_list);
+ 		ExeExternal(args, job_list);
 	 	return 0;
 	}
 	if (illegal_cmd == true)
