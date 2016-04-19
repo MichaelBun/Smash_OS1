@@ -63,8 +63,8 @@ class job
 /*Function Declarations*/
 int ExeComp(char* lineSize);
 int BgCmd(char* lineSize, list<job>& job_list);
-int ExeCmd(char* lineSize, char* cmdString, list<Var*>& var_list, list<job>& job_list);
-void ExeExternal(char *args[MAX_ARG], char* cmdString, list<job>& job_list);
+int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list);
+void ExeExternal(char *args[MAX_ARG],list<job>& job_list);
 
 
 #endif
