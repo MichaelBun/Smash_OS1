@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 	 	printf("smash > ");
 		fgets(lineSize, MAX_LINE_SIZE, stdin);
 		strcpy(cmdString, lineSize);  
-		strcpy(cmdString[strlen(lineSize)-1],"\0");
+		strcpy(&cmdString[strlen(lineSize)-1],"\0");
 		printf("%s\n%s\n",lineSize,cmdString);
 		printf("%d\n",strlen(cmdString));
 		//cmdString[strlen(lineSize)-1]='\0'; //SEGMENTATION FAULT
