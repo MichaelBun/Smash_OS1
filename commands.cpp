@@ -407,7 +407,7 @@ int ExeComp(char* lineSize)
 	string _new_command_0 = "csh"; //So C++ wont be mad about using char*
 	string _new_command_1 = "-f";
 	string _new_command_2 = "-c";
-	mew_command[0] = (char*)malloc(sizeof(char)*_new_command_0.length());
+	new_command[0] = (char*)malloc(sizeof(char)*_new_command_0.length());
 	strcpy(new_command[0],_new_command_0.c_str());
 	printf("%s", new_command[0]);
 	strcpy(new_command[1],_new_command_1.c_str());
