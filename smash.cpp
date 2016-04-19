@@ -27,8 +27,8 @@ int GPid;
 //**************************************************************************************
 int main(int argc, char *argv[])
 {
-   // char cmdString[MAX_LINE_SIZE]; 	   
-	char* cmdString = (char*)malloc(sizeof(char)*MAX_LINE_SIZE);
+    char cmdString[MAX_LINE_SIZE]; 	   
+
 	
 	//signal declaretions
 
@@ -52,10 +52,9 @@ int main(int argc, char *argv[])
 	 	printf("smash > ");
 		fgets(lineSize, MAX_LINE_SIZE, stdin);
 		strcpy(cmdString, lineSize);  
-		strcpy(&cmdString[strlen(lineSize)-1],"\0");
 		printf("%s\n%s\n",lineSize,cmdString);
 		printf("%d\n",strlen(cmdString));
-		//cmdString[strlen(lineSize)-1]='\0'; //SEGMENTATION FAULT
+		cmdString[strlen(lineSize)-1]='\0'; //SEGMENTATION FAULT
 					// perform a complicated Command
 		printf("%s",cmdString);
 		if(!ExeComp(lineSize)) continue; 
