@@ -412,6 +412,7 @@ int ExeComp(char* lineSize)
 	strcpy(new_command[2],_new_command_2.c_str());
 	new_command[3] = lineSize;
 	new_command[4] = NULL;
+	printf("%s", new_command[0]);
 	
     if ((strstr(lineSize, "|")) || (strstr(lineSize, "<")) || (strstr(lineSize, ">")) || (strstr(lineSize, "*")) || (strstr(lineSize, "?")) || (strstr(lineSize, ">>")) || (strstr(lineSize, "|&")))
     {
