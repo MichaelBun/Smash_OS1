@@ -53,7 +53,8 @@ int main(int argc, char *argv[])
 		fgets(lineSize, MAX_LINE_SIZE, stdin);
 		strcpy(cmdString, lineSize);    
 		printf("%s\n%s\n",lineSize,cmdString);
-		cmdString[strlen(cmdString)-1]='\0';
+		print("%d\n",strlen(cmdString));
+		cmdString[strlen(cmdString)-1]='\0'; //SEGMENTATION FAULT
 					// perform a complicated Command
 		printf("%s",cmdString);
 		if(!ExeComp(lineSize)) continue; 
