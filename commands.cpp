@@ -401,13 +401,13 @@ void ExeExternal(char *args[MAX_ARG], list<job>& job_list)
 //**************************************************************************************
 int ExeComp(char* lineSize)
 {
+	printf("testing");
 	char ExtCmd[MAX_LINE_SIZE+2];
 	char *args[MAX_ARG];
 	char* new_command[MAX_ARG];
 	string _new_command_0 = "csh"; //So C++ wont be mad about using char*
 	string _new_command_1 = "-f";
 	string _new_command_2 = "-c";
-	printf("testing");
 	strcpy(new_command[0],_new_command_0.c_str());
 	printf("%s", new_command[0]);
 	strcpy(new_command[1],_new_command_1.c_str());
