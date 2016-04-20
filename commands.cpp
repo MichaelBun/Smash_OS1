@@ -25,8 +25,8 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list, char* fwd,
 	int i = 0, num_arg = 0;
 
 	getcwd(pwd,MAX_LINE_SIZE);
-	
-	
+
+
 	bool illegal_cmd = false; // illegal command
 
 	cmd = strtok(lineSize, delimiters); //command
@@ -54,7 +54,7 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list, char* fwd,
 		if(!strcmp(args[1],"-")) //We want to go to the former path
 		{
             //char* fwd_ptr;
-            //fwd_ptr=&fwd[1];	
+            //fwd_ptr=&fwd[1];
 
 			if (!chdir(fwd)) // We Succeeded
 			{
@@ -479,48 +479,64 @@ int ExeComp(char* lineSize)
 //**************************************************************************************
 int BgCmd(char *linesize, list<job>& job_list)
 {
-	char* Command;
-	char* delimeters = strdup(" \t\n");
+	char* cmd;
+	char* delimiters = strdup(" \t\n");
 	char* args[MAX_ARG];
 	char* ampercent = strdup("&");
-	char* empty = strdup("\0");
+	char* empty = strdup("\n");
+	int num_arg;
 	if(linesize[strlen(linesize)-2] == *ampercent)
 	{
-		linesize[strlen(linesize)-2] = *empty;
-		/*if (Command == NULL) //Building the args
-			return 0; */
-		for (int i = 1; i<MAX_ARG; i++)
-		{
-			args[i] = strtok(NULL, delimeters);
-		}
-		args[0] = Command;
+		linesize[strlen(linesize)-2] = *empty; //remove &
 
-			int pID;
-    	switch(pID = fork())
-			{
-					case -1:
-						{// Add your code here (error)
-							printf("Error\n");
-							exit(1);
-							/*
-							your code
-						*/}
-					case 0 :
-							{// Child Process
-							setpgrp();
-							int my_pID = (int)getpid();
-							jobStatus status = working;
-							char* procc_name = (char*)malloc(sizeof(char)*strlen(args[0]));
-							job new_job = job(my_pID,status, procc_name);
-							job_list.push_back(new_job);
-							execvp(args[0],args);
-							printf("Error\n");
-						}		exit(1);
+        cmd = strtok(linesize, delimiters); //command
+        if (cmd == NULL) {
+            perror("Can't read the command");
+            return 0;
+        }
+        args[0] = cmd;
 
-					default:
-							break;
+        for (int i=1; i<MAX_ARG; i++)
+        {
+            args[i] = strtok(NULL, delimiters);
+            if (args[i] != NULL)
+                num_arg++;
 
-			}
+        }
+            //args[0] = Command;
+
+                int pID;
+            switch(pID = fork())
+                {
+                        case -1:
+                            {// Add your code here (error)
+                                printf("Error\n");
+                                exit(1);
+                                /*
+                                your code
+                            */}
+                        case 0 :
+                                {// Child Process
+                                setpgrp();
+                                int my_pID = (int)getpid();
+                                /*jobStatus status = working;
+                                char* procc_name = (char*)malloc(sizeof(char)*strlen(args[0]));
+                                job new_job = job(my_pID,status, procc_name);
+                                job_list.push_back(new_job);*/
+                                execvp(args[0],args);
+                                printf("%d\n",(int)errno);
+                                printf("Error\n");
+                                    exit(1); }
+
+                        default:
+                                int my_pID = (int)getpid();
+                                jobStatus status = working;
+                                char* procc_name = (char*)malloc(sizeof(char)*strlen(args[0]));
+                                job new_job = job(my_pID,status, procc_name);
+                                job_list.push_back(new_job);
+                                return(0);
+
+                }
 	}
 	return -1;
 }
