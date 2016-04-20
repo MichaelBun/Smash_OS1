@@ -15,7 +15,7 @@ using std::list;
 using std::string;
 
 
-int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list)
+int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list, char* fwd, char* pwd)
 {
 	char* cmd;
 	char* args[MAX_ARG];
@@ -23,13 +23,10 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list)
 	char* delimiters=(char*)malloc(sizeof(char*)*delim_.length());
 	strcpy(delimiters,delim_.c_str());
 	int i = 0, num_arg = 0;
-	// ADDED BY US
 
-	char* fwd=(char*)malloc(sizeof(char*)*MAX_LINE_SIZE); //Former Working Directory
-	char* pwd=(char*)malloc(sizeof(char*)*MAX_LINE_SIZE); //Current Working Dir
-	getcwd(fwd,MAX_LINE_SIZE); //At the start they are the same
 	getcwd(pwd,MAX_LINE_SIZE);
-	// ADDED BY US
+	
+	
 	bool illegal_cmd = false; // illegal command
 
 	cmd = strtok(lineSize, delimiters); //command

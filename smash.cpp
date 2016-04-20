@@ -39,7 +39,12 @@ int main(int argc, char *argv[])
 	// Init globals
 	GPid=-1;
 
-
+	// ADDED BY US
+	char* fwd=(char*)malloc(sizeof(char*)*MAX_LINE_SIZE); //Former Working Directory
+	char* pwd=(char*)malloc(sizeof(char*)*MAX_LINE_SIZE); //Current Working Dir
+	getcwd(fwd,MAX_LINE_SIZE); //At the start they are the same
+	getcwd(pwd,MAX_LINE_SIZE);
+	// ADDED BY US
 
     	while (1)
     	{
