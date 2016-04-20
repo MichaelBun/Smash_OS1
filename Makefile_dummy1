@@ -1,0 +1,15 @@
+# Makefile for the smash program
+CC = gcc
+CFLAGS = -g -Wall
+CCLINK = $(CC)
+OBJS = dummy1.o
+RM = rm -f
+# Creating the  executable
+smash: $(OBJS)
+	$(CCLINK) -o dummy1 $(OBJS)
+# Creating the object files
+dummy.o: dummy1.c
+# Cleaning old files before new make
+clean:
+	$(RM) $(TARGET) *.o *~ "#"* core.*
+
