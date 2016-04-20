@@ -18,9 +18,13 @@ using std::list;
 
 
 char lineSize[MAX_LINE_SIZE];
+char* L_Fg_Cmd;
 list<Var*> var_list;
 list<job> job_list;
 int GPid;
+
+
+
 //**************************************************************************************
 // function name: main
 // Description: main function of smash. get command from user and calls command functions
@@ -29,7 +33,10 @@ int main(int argc, char *argv[])
 {
     char cmdString[MAX_LINE_SIZE];
 
-
+    L_Fg_Cmd =(char*)malloc(sizeof(char)*(MAX_LINE_SIZE+1));
+        if (L_Fg_Cmd == NULL)
+            exit (-1);
+    L_Fg_Cmd[0] = '\0';
 	//signal declaretions
 
 	sighandler(SIGTSTP, &ctrl_z); //TODO check parameters. do we need "&"?????

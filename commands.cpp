@@ -191,9 +191,11 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list, char* fwd,
  		for(std::list<job>::iterator i = job_list.begin(); i!=job_list.end(); i++)
 		{
 			int pid = i->GetPid();
-			double time = i->GetTime();
+			int time = i->GetTime();
 			char* name = i->GetName();
-			printf("[%d] %s : %d %f secs\n",counter,name,pid,time);
+			printf("[%d] %s : %d %d secs",counter,name,pid,time);
+			if((i->GetStatus())==suspended) cout<<" (Stopped)"<<endl;
+			else cout<<endl;
 			counter++;
 		}
 	}
@@ -201,7 +203,7 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list, char* fwd,
 	else if (!strcmp(cmd, "showpid"))
 	{
 		int my_pid = (int)getpid();
-		printf("smash pid is %d", my_pid);
+		printf("smash pid is %d\n", my_pid);
 	}
 	/*************************************************/
 	else if (!strcmp(cmd, "kill"))
@@ -268,6 +270,7 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list, char* fwd,
 						else
 						{
 							GPid = job_pid ;
+                            strcpy(L_Fg_Cmd, i->GetName()); //copy name of last process that sent to fg
 							free(i->GetName());
 							job_list.erase(i);
 							waitpid(job_pid,NULL,WUNTRACED); // wait untill we done
@@ -277,6 +280,7 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list, char* fwd,
 					else //it was running in the background
 					{
 						GPid=job_pid ;
+						strcpy(L_Fg_Cmd, i->GetName()); //copy name of last process that sent to fg
 						free((*i).GetName());
 						job_list.erase(i);
 						waitpid(job_pid,NULL,WUNTRACED); // wait untill we done
@@ -410,6 +414,7 @@ void ExeExternal(char *args[MAX_ARG], list<job>& job_list)
 
 			default:
 					GPid = pID;
+                    strcpy(L_Fg_Cmd, args[0]); //copy name of last process that sent to fg
 					waitpid(pID,NULL,WUNTRACED);
 					GPid = -1;
 					break;
@@ -529,10 +534,10 @@ int BgCmd(char *linesize, list<job>& job_list)
                                     exit(1); }
 
                         default:
-                                int my_pID = (int)getpid();
                                 jobStatus status = working;
                                 char* procc_name = (char*)malloc(sizeof(char)*strlen(args[0]));
-                                job new_job = job(my_pID,status, procc_name);
+                                strcpy(procc_name,args[0]);
+                                job new_job = job(pID,status, procc_name);
                                 job_list.push_back(new_job);
                                 return(0);
 
