@@ -17,50 +17,55 @@ using std::string;
 
 int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list)
 {
-	char* cmd; 
+	char* cmd;
 	char* args[MAX_ARG];
 	string delim_ = " \t\n";
-	char* delimiters;
+	char* delimiters=(char*)malloc(sizeof(char*)*delim_.length());
 	strcpy(delimiters,delim_.c_str());
 	int i = 0, num_arg = 0;
 	// ADDED BY US
 
-	char* fwd; //Former Working Directory
-	char* pwd; //Current Working Dir
+	char* fwd=(char*)malloc(sizeof(char*)*MAX_LINE_SIZE); //Former Working Directory
+	char* pwd=(char*)malloc(sizeof(char*)*MAX_LINE_SIZE); //Current Working Dir
 	getcwd(fwd,MAX_LINE_SIZE); //At the start they are the same
 	getcwd(pwd,MAX_LINE_SIZE);
-	printf("%s\n %s\n %s\n",delimiters,fwd,pwd);
 	// ADDED BY US
 	bool illegal_cmd = false; // illegal command
 
 	cmd = strtok(lineSize, delimiters); //command
-	if (cmd == NULL) perror("Can't read the command");
-		return 0; 
+	if (cmd == NULL) {
+        perror("Can't read the command");
+		return 0;
+    }
    	args[0] = cmd;
 
 	for (i=1; i<MAX_ARG; i++)
 	{
-		args[i] = strtok(NULL, delimiters); 
-		if (args[i] != NULL) 
-			num_arg++; 
- 
+		args[i] = strtok(NULL, delimiters);
+		if (args[i] != NULL)
+			num_arg++;
+
 	}
 /*************************************************/
 // Built in Commands PLEASE NOTE NOT ALL REQUIRED
 // ARE IN THIS CHAIN OF IF COMMANDS. PLEASE ADD
 // MORE IF STATEMENTS AS REQUIRED
 /*************************************************/
-	if (!strcmp(cmd, "cd") ) 
+	if (!strcmp(cmd, "cd") )
 	{
 		getcwd(pwd,MAX_LINE_SIZE);
 		if(!strcmp(args[1],"-")) //We want to go to the former path
 		{
+            //char* fwd_ptr;
+            //fwd_ptr=&fwd[1];
+
+
 			if (!chdir(fwd)) // We Succeeded
 			{
 				strcpy(fwd,pwd);
 				getcwd(pwd,MAX_LINE_SIZE);
 			}
-			
+
 		}
 		else //Want to change to a given path
 		{
@@ -71,8 +76,8 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list)
 			}
 			else // We Failed
 			{
-				if(errno == ENOENT || errno == ENOTDIR) // We Failed 
-				//ENOENT = No such directory 
+				if(errno == ENOENT || errno == ENOTDIR) // We Failed
+				//ENOENT = No such directory
 				//ENOTDIR = A component of the path does not exist
 				{
 					printf("smash error: > “%s” - path not found\n", args[1]);
@@ -80,16 +85,16 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list)
 			}
 		}
 
-	} 
-	
+	}
+
 	/*************************************************/
-	else if (!strcmp(cmd, "pwd")) 
+	else if (!strcmp(cmd, "pwd"))
 	{
 		getcwd(pwd,MAX_LINE_SIZE);
 		printf("%s\n", pwd);
-		
+
 	}
-	
+
 	/*************************************************/
 	else if (!strcmp(cmd, "mkdir"))
 	{
@@ -99,26 +104,43 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list)
 			if(errno == EEXIST) // EEXIST - This directory already exists
 			{
 				printf("smash error: > “%s” – directory already exists\n", args[1]);
+				return -1;
 			}
 			printf("smash error: > “%s” – cannot create directory\n", args[1]);
 		}
 	}
 	/*************************************************/
-	
-	else if (!strcmp(cmd, "set")) 
+
+	else if (!strcmp(cmd, "set"))
 	{
+        if(num_arg!=2){
+            cout<<"Num of parameters is wrong"<<endl;
+        }
+        for(std::list<Var*>::iterator i = var_list.begin(); i!=var_list.end(); i++) //check if var alreardy in list
+            {
+                if(!strcmp((*i)->name, args[1])){
+                    free((*i)->value);
+                    (*i)->value = (char*)malloc(sizeof(args[2]));
+                    strcpy((*i)->value, args[2]);
+                    return 0;
+                }
+            }
 		Var* new_var = (Var*)malloc(sizeof(Var));
- 		char* var_name = (char*)malloc(sizeof(args[1]));  // Setting up the new item in the var list
-		char* var_value = (char*)malloc(sizeof(args[2]));
-		new_var->name = var_name;
-		new_var->value = var_value;
+		new_var->name = (char*)malloc(sizeof(args[1]));
+		new_var->value = (char*)malloc(sizeof(args[2]));
+		strcpy(new_var->name, args[1]);
+		strcpy(new_var->value, args[2]);
 		var_list.push_back(new_var);
-		
+
 	}
 	/*************************************************/
-		
-	else if (!strcmp(cmd, "unset")) 
+
+	else if (!strcmp(cmd, "unset"))
 	{
+        if(num_arg!=1){
+            cout<<"Num of parameters is wrong"<<endl;
+            return 0;
+        }
 		int flag=-1;
  		for(std::list<Var*>::iterator i = var_list.begin(); i!=var_list.end(); i++)
 		{
@@ -129,16 +151,18 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list)
 				free((*i)->value);
 				free((*i));
 				var_list.erase(i);
+				return 0;
 			}
 		}
  		if(flag!=0)
 		printf("smash error: > “%s” - variable not found\n",args[1]);
 	}
 	/*************************************************/
-		
-	else if (!strcmp(cmd, "show")) 
+
+	else if (!strcmp(cmd, "show"))
 	{
-		if(!strcmp(args[1],"")) //Print all
+        if(var_list.empty()) cout<<"No parameters to show"<<endl;
+		if(num_arg==0) //Print all
 		{
 			for(std::list<Var*>::iterator i = var_list.begin(); i!=var_list.end(); i++)
 			{
@@ -152,17 +176,20 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list)
 				if(!strcmp((*i)->name,args[1]))
 				{
 					printf("%s := %s\n",(*i)->name,(*i)->value);
+					return 0;
 				}
+				cout<<"Parameter not found"<<endl;
 			}
+
 		}
 
 		//TODO what if varname not found??
- 		
+
 	}
 	/*************************************************/
-	
-	
-	else if (!strcmp(cmd, "jobs")) 
+
+
+	else if (!strcmp(cmd, "jobs"))
 	{
 		int counter=1;
  		for(std::list<job>::iterator i = job_list.begin(); i!=job_list.end(); i++)
@@ -175,7 +202,7 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list)
 		}
 	}
 	/*************************************************/
-	else if (!strcmp(cmd, "showpid")) 
+	else if (!strcmp(cmd, "showpid"))
 	{
 		int my_pid = (int)getpid();
 		printf("smash pid is %d", my_pid);
@@ -217,15 +244,15 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list)
 						{
 							delete((*i).GetName());
 							job_list.erase(i);
-						} 
+						}
 					}
 					break;
 				}
 			}
 		}
-	} 
+	}
 	/*************************************************/
-	
+
 	else if (!strcmp(cmd, "fg")) //NEED TO ADD LIST REMOVAL
 	{
 		int job_num = atoi(args[1]);
@@ -247,7 +274,7 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list)
 							GPid = job_pid ;
 							free(i->GetName());
 							job_list.erase(i);
-							waitpid(job_pid,NULL,WUNTRACED); // wait untill we done	
+							waitpid(job_pid,NULL,WUNTRACED); // wait untill we done
 							GPid = -1;
 						}
 					}
@@ -263,9 +290,9 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list)
 				}
 				counter++;
 			}
-	} 
+	}
 	/*************************************************/
-	else if (!strcmp(cmd, "bg")) 
+	else if (!strcmp(cmd, "bg"))
 	{
 		int job_num = atoi(args[1]);
 		int counter = 1;
@@ -289,7 +316,7 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list)
 					break;
 				}
 			}
-  		
+
 	}
 	/*************************************************/
 	else if (!strcmp(cmd, "quit"))
@@ -338,15 +365,15 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list)
 					}
 					counter_delete++;
 				}
-				
+
 				if(job_list.empty()) //true if list is empty
 				{
 					exit(0);
 				}
 			}
 		}
-   		
-	} 
+
+	}
 	/*************************************************/
 	else // external command
 	{
@@ -369,13 +396,13 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list)
 void ExeExternal(char *args[MAX_ARG], list<job>& job_list)
 {
 	int pID;
-    	switch(pID = fork()) 
+    	switch(pID = fork())
 	{
-    		case -1: 
+    		case -1:
 					// Add your code here (error)
 					perror("Error\n");
 					exit(1);
-					/* 
+					/*
 					your code
 					*/
         	case 0 :
@@ -384,13 +411,13 @@ void ExeExternal(char *args[MAX_ARG], list<job>& job_list)
 					execvp(args[0],args);
 					printf("Error\n");
 					exit(1);
-			
+
 			default:
 					GPid = pID;
 					waitpid(pID,NULL,WUNTRACED);
 					GPid = -1;
 					break;
-			
+
 	}
 }
 //**************************************************************************************
@@ -401,30 +428,33 @@ void ExeExternal(char *args[MAX_ARG], list<job>& job_list)
 //**************************************************************************************
 int ExeComp(char* lineSize)
 {
-	printf("testing");
-	char ExtCmd[MAX_LINE_SIZE+2];
+	//char ExtCmd[MAX_LINE_SIZE+2];
 	char *args[MAX_ARG];
 	char* new_command[MAX_ARG];
 	string _new_command_0 = "csh"; //So C++ wont be mad about using char*
 	string _new_command_1 = "-f";
 	string _new_command_2 = "-c";
+
+    new_command[0]=(char*)malloc(sizeof(char)*_new_command_0.length());
+    new_command[1]=(char*)malloc(sizeof(char)*_new_command_1.length());
+    new_command[2]=(char*)malloc(sizeof(char)*_new_command_2.length());
+
 	strcpy(new_command[0],_new_command_0.c_str());
-	printf("%s", new_command[0]);
 	strcpy(new_command[1],_new_command_1.c_str());
 	strcpy(new_command[2],_new_command_2.c_str());
 	new_command[3] = lineSize;
 	new_command[4] = NULL;
-	
+
     if ((strstr(lineSize, "|")) || (strstr(lineSize, "<")) || (strstr(lineSize, ">")) || (strstr(lineSize, "*")) || (strstr(lineSize, "?")) || (strstr(lineSize, ">>")) || (strstr(lineSize, "|&")))
     {
 		int pID;
-    	switch(pID = fork()) 
+    	switch(pID = fork())
 	{
-    		case -1: 
+    		case -1:
 					// Add your code here (error)
 					printf("Error\n");
 					exit(1);
-					/* 
+					/*
 					your code
 					*/
         	case 0 :
@@ -433,16 +463,16 @@ int ExeComp(char* lineSize)
 					execvp(new_command[0],new_command);
 					printf("Error\n");
 					exit(1);
-			
+
 			default:
 					GPid = pID;
 					waitpid(pID,NULL,WUNTRACED);
 					GPid = -1;
 					break;
-			
+
 	}
-		
-	} 
+
+	}
 	return -1;
 }
 //**************************************************************************************
@@ -470,15 +500,15 @@ int BgCmd(char *linesize, list<job>& job_list)
 		args[0] = Command;
 
 			int pID;
-    	switch(pID = fork()) 
+    	switch(pID = fork())
 			{
-					case -1: 
+					case -1:
 						{// Add your code here (error)
 							printf("Error\n");
 							exit(1);
-							/* 
+							/*
 							your code
-						*/}		
+						*/}
 					case 0 :
 							{// Child Process
 							setpgrp();
@@ -490,10 +520,10 @@ int BgCmd(char *linesize, list<job>& job_list)
 							execvp(args[0],args);
 							printf("Error\n");
 						}		exit(1);
-					
+
 					default:
 							break;
-					
+
 			}
 	}
 	return -1;

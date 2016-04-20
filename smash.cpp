@@ -3,7 +3,7 @@ main file. This file contains the main function of smash
 *******************************************************************/
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <unistd.h> 
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,8 +16,8 @@ main file. This file contains the main function of smash
 using namespace std;
 using std::list;
 
-char* L_Fg_Cmd;
-char lineSize[MAX_LINE_SIZE]; 
+
+char lineSize[MAX_LINE_SIZE];
 list<Var*> var_list;
 list<job> job_list;
 int GPid;
@@ -27,42 +27,34 @@ int GPid;
 //**************************************************************************************
 int main(int argc, char *argv[])
 {
-    char cmdString[MAX_LINE_SIZE]; 	   
+    char cmdString[MAX_LINE_SIZE];
 
-	
+
 	//signal declaretions
 
 	sighandler(SIGTSTP, &ctrl_z); //TODO check parameters. do we need "&"?????
 	sighandler(SIGINT, &ctrl_c);
 
-	/************************************/
 
-	/************************************/
-	// Init globals 
+	// Init globals
+	GPid=-1;
 
 
-	
-	L_Fg_Cmd =(char*)malloc(sizeof(char)*(MAX_LINE_SIZE+1));
-	if (L_Fg_Cmd == NULL) 
-			exit (-1); 
-	L_Fg_Cmd[0] = '\0';
-	
+
     	while (1)
     	{
 	 	printf("smash > ");
 		fgets(lineSize, MAX_LINE_SIZE, stdin);
-		strcpy(cmdString, lineSize);  
-		printf("%s\n%s\n",lineSize,cmdString);
-		printf("%d\n",strlen(cmdString));
-		//cmdString[strlen(lineSize)-1]=NULL; //SEGMENTATION FAULT
-					// perform a complicated Command
-		printf("%s",cmdString);
-		if(!ExeComp(&lineSize)) continue; 
-					// background command	
-	 	if(!BgCmd(&lineSize, job_list)) continue; 
+		strcpy(cmdString, lineSize);
+
+		if(!ExeComp(lineSize)) continue;
+                // background command
+        if(!BgCmd(lineSize, job_list)) continue;
 					// built in commands
-		ExeCmd(&lineSize, var_list, job_list);
-		
+		ExeCmd(lineSize, var_list, job_list);
+
+		//cout<<"unknown command!"<<endl;
+
 		/* initialize for next line read*/
 		lineSize[0]='\0';
 		cmdString[0]='\0';
