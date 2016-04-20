@@ -51,7 +51,6 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list, char* fwd,
 	if (!strcmp(cmd, "cd") )
 	{
 		getcwd(pwd,MAX_LINE_SIZE);
-		printf("%s\n",args[1]);
 		if(!strcmp(args[1],"-")) //We want to go to the former path
 		{
             //char* fwd_ptr;
@@ -59,7 +58,6 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list, char* fwd,
 
 			if (!chdir(fwd)) // We Succeeded
 			{
-				printf("WE GOT IN\n",args[0]);
 				strcpy(fwd,pwd);
 				getcwd(pwd,MAX_LINE_SIZE);
 			}
@@ -320,7 +318,7 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list, char* fwd,
 	else if (!strcmp(cmd, "quit"))
 	{
 		time_t start_time[job_list.size()];
-		if(args[1] =="") //regular quit
+		if(num_arg == 0) //regular quit
 		{
 			exit(0);
 		}
