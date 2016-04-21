@@ -7,7 +7,7 @@
    Synopsis: handle the Control-C */
 #include "signals.hpp"
 
-
+using namespace std;
 using std::list;
 
 
@@ -87,13 +87,39 @@ void ctrl_z(int signum){
     strcpy(name, L_Fg_Cmd);
     //cout<<"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"<<endl;
 	job newjob(GPid, suspended, name);
-	job_list.push_back(newjob);
+	job_list->push_back(newjob);
 
 	printf("signal SIGTSTP was sent to pid %d\n", GPid);
 	GPid = -1;
 	return;
 
 }
+
+
+void sigchld_handler(int signum) //cathing sigchild when child dies
+{
+    int pid;
+    int   status;
+ /*   if(GPid_2 != -1)
+    {
+        cout << "We get here"<<endl;
+        job thisJob = job_list->back();
+        free(thisJob.GetName());
+        job_list->pop_back();
+        GPid_2 = -1;
+    }*/
+       /* mypid = getpid();
+         for(std::list<job>::iterator i = (job_list)->begin(); i!=(job_list)->end(); i++){
+            if(){
+            cout<<"Ivan is right"<<endl;
+                free((*i).GetName());
+                job_list->erase(i);
+                break;*/
+
+        while ((pid = waitpid(-1,NULL,WNOHANG))>0){
+        remove_by_pid(pid);
+
+    }
 
 
 

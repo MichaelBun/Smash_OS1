@@ -2,6 +2,7 @@
 #define _COMMANDS_H
 #include <iostream>
 #include <stdio.h>
+#include <stdlib.h>
 #include <list>
 #include <unistd.h>
 #include <stdio.h>
@@ -18,10 +19,7 @@
 using std::list;
 
 typedef enum {suspended, working } jobStatus;
-
-//Globals
-extern int GPid; //to know which process is in foreground
-extern char* L_Fg_Cmd;
+void remove_by_pid(int pid);
 
 
 typedef struct _Var
@@ -68,7 +66,12 @@ int BgCmd(char* lineSize, list<job>& job_list);
 int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list, char* fwd, char* pwd);
 void ExeExternal(char *args[MAX_ARG],list<job>& job_list);
 
-extern list<job> job_list;
+extern list<job> _job_list;
+//Globals
+extern int GPid; //to know which process is in foreground
+extern char* L_Fg_Cmd;
+extern list<job>* job_list;
+extern int GPid_2;
 
 #endif
 

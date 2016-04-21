@@ -20,10 +20,10 @@ using std::list;
 char lineSize[MAX_LINE_SIZE];
 char* L_Fg_Cmd;
 list<Var*> var_list;
-list<job> job_list;
 int GPid;
-
-
+int GPid_2=-1;
+list<job>* job_list;
+list<job> _job_list;
 
 //**************************************************************************************
 // function name: main
@@ -32,6 +32,7 @@ int GPid;
 int main(int argc, char *argv[])
 {
     char cmdString[MAX_LINE_SIZE];
+    job_list = &_job_list;
 
     L_Fg_Cmd =(char*)malloc(sizeof(char)*(MAX_LINE_SIZE+1));
         if (L_Fg_Cmd == NULL)
@@ -41,7 +42,7 @@ int main(int argc, char *argv[])
 
 	sighandler(SIGTSTP, &ctrl_z); //TODO check parameters. do we need "&"?????
 	sighandler(SIGINT, &ctrl_c);
-
+    sighandler(SIGCHLD, &sigchld_handler);
 
 	// Init globals
 	GPid=-1;
@@ -61,9 +62,9 @@ int main(int argc, char *argv[])
 
 		if(!ExeComp(lineSize)) continue;
                 // background command
-        if(!BgCmd(lineSize, job_list)) continue;
+        if(!BgCmd(lineSize, (_job_list))) continue;
 					// built in commands
-		ExeCmd(lineSize, var_list, job_list,fwd,pwd);
+		ExeCmd(lineSize, var_list, (_job_list),fwd,pwd);
 
 		//cout<<"unknown command!"<<endl;
 

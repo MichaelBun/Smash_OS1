@@ -15,7 +15,7 @@ using std::list;
 using std::string;
 
 void remove_elem_from_jobs(int );
-
+void remove_by_pid(int pid);
 
 int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list, char* fwd, char* pwd)
 {
@@ -524,7 +524,7 @@ int BgCmd(char *linesize, list<job>& job_list)
                 num_arg++;
 
         }
-            
+
 
             int pID;
             switch(pID = fork())
@@ -543,29 +543,14 @@ int BgCmd(char *linesize, list<job>& job_list)
 						}
 
                        default:
+                                GPid_2 = pID;
 								jobStatus status = working;
                                 char* procc_name = (char*)malloc(sizeof(char)*strlen(args[0]));
                                 strcpy(procc_name,args[0]);
 								int my_pID = (int)getpid();
                                 job new_job(my_pID, status, procc_name);
                                 job_list.push_back(new_job);
-								delay(2);
-								if(kill(pID,0) ==0){}
-								else if (errno == ESRCH) //NO SUCH PROCESS
-								{
-									printf("Unknown command: %s\n", cmd);
-									job Free_this = job_list.back();
-									free(Free_this.GetName());
-									job_list.pop_back();
-								}
-								else
-								{
-									printf("Unknown command: %s\n", cmd);
-									job Free_this = job_list.back();
-									free(Free_this.GetName());
-									job_list.pop_back();
-								}
-							return(0);
+                                return(0);
                 }
 	}
 	return -1;
@@ -573,13 +558,25 @@ int BgCmd(char *linesize, list<job>& job_list)
 
 void remove_elem_from_jobs(int elem_num){
     int counter = 1;
-    for(std::list<job>::iterator i = job_list.begin(); i!=job_list.end(); i++)
+    for(std::list<job>::iterator i = _job_list.begin(); i!=_job_list.end(); i++)
     {
         if(counter == elem_num){
             free((*i).GetName());
-            job_list.erase(i);
+            _job_list.erase(i);
          //   free(L_Fg_Cmd);
         }
     }
+
 }
 
+void remove_by_pid(int pid){
+    for(std::list<job>::iterator i = (*job_list).begin(); i!=(*job_list).end(); i++)
+    {
+        if((*i).GetPid()== pid){
+            free((*i).GetName());
+            (*job_list).erase(i);
+         //   free(L_Fg_Cmd);
+        }
+    }
+
+}
