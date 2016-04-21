@@ -543,6 +543,7 @@ int BgCmd(char *linesize, list<job>& job_list)
 								int my_pID = (int)getpid();
                                 job new_job(my_pID, status, procc_name);
                                 job_list.push_back(new_job);
+								cout << "We do get here" << endl;
                                 if(execvp(args[0],args)<0){
                                 printf("Unknown command: %s\n", cmd);
 								job Free_this = job_list.back();
