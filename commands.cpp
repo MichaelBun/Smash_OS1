@@ -535,7 +535,7 @@ int BgCmd(char *linesize, list<job>& job_list)
                                 break;
 
                         case 0 :
-                                // Child Process
+						{		// Child Process
                                 setpgrp();
 								jobStatus status = working;
                                 char* procc_name = (char*)malloc(sizeof(char)*strlen(args[0]));
@@ -550,12 +550,9 @@ int BgCmd(char *linesize, list<job>& job_list)
 								job_list.pop_back();
                                 exit(1);
                                 }
+						}
 
                        default:
-								jobStatus status;
-                                char* procc_name;
-								int my_pID;
-                                job new_job;
                                 return(0);
 
                 }
