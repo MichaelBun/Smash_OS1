@@ -537,8 +537,6 @@ int BgCmd(char *linesize, list<job>& job_list)
                         case 0 :
 						{		// Child Process
                                 setpgrp();
-
-								cout << "We do get here" << endl;
                                 if(execvp(args[0],args)<0){
 									exit(1);
                                 }
@@ -551,7 +549,6 @@ int BgCmd(char *linesize, list<job>& job_list)
 								int my_pID = (int)getpid();
                                 job new_job(my_pID, status, procc_name);
                                 job_list.push_back(new_job);
-                                return(0);
 								if(kill(pID,0) ==0){}
 								else if (errno == ESRCH) //NO SUCH PROCESS
 								{
@@ -567,7 +564,7 @@ int BgCmd(char *linesize, list<job>& job_list)
 									free(Free_this.GetName());
 									job_list.pop_back();
 								}
-
+							return(0);
                 }
 	}
 	return -1;
