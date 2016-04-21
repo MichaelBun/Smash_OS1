@@ -14,6 +14,8 @@ using namespace std;
 using std::list;
 using std::string;
 
+void remove_elem_from_jobs(int );
+
 
 int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list, char* fwd, char* pwd)
 {
@@ -327,59 +329,67 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list, char* fwd,
 	/*************************************************/
 	else if (!strcmp(cmd, "quit"))
 	{
-		time_t start_time[job_list.size()];
+		//time_t start_time[job_list.size()];
 		if(num_arg == 0) //regular quit
 		{
+            for(int i=1; i<job_list.size()+1; i++){//free memory
+                remove_elem_from_jobs(i);
+                free(L_Fg_Cmd);
+            }
 			exit(0);
 		}
-		else if(args[1] == "kill")
+		if(strcmp(args[1], "kill")==0 && num_arg==1) //quit kill
 		{
-			int counter_SetTime = 1;
-			for(std::list<job>::iterator i = job_list.begin(); i!=job_list.end(); i++)
+            if(job_list.empty()) exit(0);//true if list is empty
+
+            int counter=1;
+            bool flag=false; //if sigterm was sent flag=true
+
+            for(std::list<job>::iterator i = job_list.begin(); i!=job_list.end(); i++) //TODO check if we delet the last element
 			{
-				if(kill((*i).GetPid(),SIGTERM)==-1)
+                if(kill((*i).GetPid(),SIGTERM)==-1)
 				{
 					printf("Error with sending signal\n");
 				}
 				else
 				{
-					start_time[counter_SetTime] = time(NULL);
-				}
-				counter_SetTime++;
-			}
-			while(1) //Now check if 5 seconds past, and delete whatever is not needed
-			{
-				int counter_delete=1; //For start time array
-				for(std::list<job>::iterator i = job_list.begin(); i!=job_list.end(); i++)
-				{
-					if(waitpid((*i).GetPid(),NULL,WNOHANG)) // This job ended.
-					{
-						free((*i).GetName());
-						job_list.erase(i);
-					}
-					else if((double)(start_time[counter_delete] - time(NULL))>5) // 5 Seconds past
-					{
-						if(kill((*i).GetPid(),SIGKILL)==-1) //Kill it
-						{
-							printf("Error with sending signal\n");
-						}
-						else //Remove from list
-						{
-							free((*i).GetName());
+                    int start_time = time(NULL);
+
+                    printf("[%d] %s - ",counter,(*i).GetName());
+                    cout<<"Sending SIGTERM... ";
+
+                    while(time(NULL)-start_time < 5){
+
+                        if(waitpid((*i).GetPid(),NULL,WNOHANG)){
+
+                            flag=true;
+                            free((*i).GetName());
 							job_list.erase(i);
-						}
-					}
-					counter_delete++;
-				}
+                            cout<<"Done."<<endl;
+                            break;
+                        }
 
-				if(job_list.empty()) //true if list is empty
-				{
-					exit(0);
-				}
-			}
-		}
+                    }
+                    if(flag!=true){
 
+                        cout<<"(5 sec passed) Sending SIGKILL... ";
+                        if(kill((*i).GetPid(),SIGKILL)){
+                            perror("Error: ");
+							printf("Error failed to send SIGKILL");
+							exit(-1);
+                        }
+                        cout<<"Done."<<endl;
+                        continue; //for. get next parameter from list
+                    }
+
+
+				}
+            }//for
+
+			exit(0);
+		}//if(args[1] == "kill")
 	}
+
 	/*************************************************/
 	else // external command
 	{
@@ -516,34 +526,27 @@ int BgCmd(char *linesize, list<job>& job_list)
         }
             //args[0] = Command;
 
-                int pID;
+            int pID;
             switch(pID = fork())
                 {
                         case -1:
-                            {// Add your code here (error)
-                                printf("Error\n");
-                                exit(1);
-                                /*
-                                your code
-                            */}
-                        case 0 :
-                                {// Child Process
-                                setpgrp();
-                                int my_pID = (int)getpid();
-                                /*jobStatus status = working;
-                                char* procc_name = (char*)malloc(sizeof(char)*strlen(args[0]));
-                                job new_job = job(my_pID,status, procc_name);
-                                job_list.push_back(new_job);*/
-                                execvp(args[0],args);
-                                printf("%d\n",(int)errno);
-                                printf("Error\n");
-                                    exit(1); }
+                            // Add your code here (error)
+                                perror ("Error BgCmd fork\n");
+                                break;
 
-                        default:
-                                jobStatus status = working;
+                        case 0 :
+                                // Child Process
+                                setpgrp();
+                                if( execvp(args[0],args)<0){
+                                printf("Unknown command: %s\n", cmd);
+                                return -1;
+                                }
+
+                       default:
+                                //jobStatus status = working;
                                 char* procc_name = (char*)malloc(sizeof(char)*strlen(args[0]));
                                 strcpy(procc_name,args[0]);
-                                job new_job = job(pID,status, procc_name);
+                                job new_job = job(pID,working, procc_name);
                                 job_list.push_back(new_job);
                                 return(0);
 
@@ -559,6 +562,7 @@ void remove_elem_from_jobs(int elem_num){
         if(counter == elem_num){
             free((*i).GetName());
             job_list.erase(i);
+         //   free(L_Fg_Cmd);
         }
     }
 }
