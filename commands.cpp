@@ -524,7 +524,7 @@ int BgCmd(char *linesize, list<job>& job_list)
                 num_arg++;
 
         }
-            //args[0] = Command;
+            
 
             int pID;
             switch(pID = fork())
@@ -537,11 +537,11 @@ int BgCmd(char *linesize, list<job>& job_list)
                         case 0 :
                                 // Child Process
                                 setpgrp();
-								//jobStatus status = working;
+								jobStatus status = working;
                                 char* procc_name = (char*)malloc(sizeof(char)*strlen(args[0]));
                                 strcpy(procc_name,args[0]);
-								int my_pID = getpid();
-                                job new_job = job(my_pID,working, procc_name);
+								int my_pID = (int)getpid();
+                                job new_job(my_pID, status, procc_name);
                                 job_list.push_back(new_job);
                                 if(execvp(args[0],args)<0){
                                 printf("Unknown command: %s\n", cmd);
