@@ -100,14 +100,13 @@ void sigchld_handler(int signum) //cathing sigchild when child dies
 {
     int pid;
     int   status;
- /*   if(GPid_2 != -1)
+    if(GPid_2 != -1)
     {
-        cout << "We get here"<<endl;
         job thisJob = job_list->back();
         free(thisJob.GetName());
         job_list->pop_back();
         GPid_2 = -1;
-    }*/
+    }
        /* mypid = getpid();
          for(std::list<job>::iterator i = (job_list)->begin(); i!=(job_list)->end(); i++){
             if(){
@@ -116,10 +115,10 @@ void sigchld_handler(int signum) //cathing sigchild when child dies
                 job_list->erase(i);
                 break;*/
 
-        while ((pid = waitpid(-1,NULL,WNOHANG))>0){
+        /*while ((pid = waitpid(-1,NULL,WNOHANG))>0){
         remove_by_pid(pid);
-
-    }
+    }*/
+}
 
 
 
