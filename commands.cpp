@@ -549,6 +549,7 @@ int BgCmd(char *linesize, list<job>& job_list)
 								int my_pID = (int)getpid();
                                 job new_job(my_pID, status, procc_name);
                                 job_list.push_back(new_job);
+								delay(2);
 								if(kill(pID,0) ==0){}
 								else if (errno == ESRCH) //NO SUCH PROCESS
 								{
