@@ -552,6 +552,10 @@ int BgCmd(char *linesize, list<job>& job_list)
                                 }
 
                        default:
+								jobStatus status;
+                                char* procc_name;
+								int my_pID;
+                                job new_job;
                                 return(0);
 
                 }
