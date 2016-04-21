@@ -540,9 +540,10 @@ int BgCmd(char *linesize, list<job>& job_list)
 								//jobStatus status = working;
                                 char* procc_name = (char*)malloc(sizeof(char)*strlen(args[0]));
                                 strcpy(procc_name,args[0]);
-                                job new_job = job(pID,working, procc_name);
+								int my_pID = getpid();
+                                job new_job = job(my_pID,working, procc_name);
                                 job_list.push_back(new_job);
-                                if( execvp(args[0],args)<0){
+                                if(execvp(args[0],args)<0){
                                 printf("Unknown command: %s\n", cmd);
 								job Free_this = job_list.back();
 								free(Free_this.GetName());
