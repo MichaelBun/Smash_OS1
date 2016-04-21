@@ -353,12 +353,12 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list, char* fwd,
 				}
 				else
 				{
-                    int start_time = time(NULL);
+                    int start_time = (int)time(NULL);
 
                     printf("[%d] %s - ",counter,(*i).GetName());
                     cout<<"Sending SIGTERM... ";
 
-                    while(time(NULL)-start_time < 5){
+                    while((int)(time(NULL)-start_time) < 5){
 
                         if(waitpid((*i).GetPid(),NULL,WNOHANG)){
 
@@ -537,17 +537,25 @@ int BgCmd(char *linesize, list<job>& job_list)
                         case 0 :
                                 // Child Process
                                 setpgrp();
-                                if( execvp(args[0],args)<0){
-                                printf("Unknown command: %s\n", cmd);
-                                return -1;
-                                }
-
-                       default:
-                                //jobStatus status = working;
+								//jobStatus status = working;
                                 char* procc_name = (char*)malloc(sizeof(char)*strlen(args[0]));
                                 strcpy(procc_name,args[0]);
                                 job new_job = job(pID,working, procc_name);
                                 job_list.push_back(new_job);
+                                if( execvp(args[0],args)<0){
+                                printf("Unknown command: %s\n", cmd);
+								job Free_this = job_list.back();
+								free(Free_this.GetName());
+								job_list.pop_back();
+                                exit(1);
+                                }
+
+                       default:
+                                //jobStatus status = working;
+                                /*char* procc_name = (char*)malloc(sizeof(char)*strlen(args[0]));
+                                strcpy(procc_name,args[0]);
+                                job new_job = job(pID,working, procc_name);
+                                job_list.push_back(new_job);*/
                                 return(0);
 
                 }
