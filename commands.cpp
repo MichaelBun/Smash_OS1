@@ -537,24 +537,36 @@ int BgCmd(char *linesize, list<job>& job_list)
                         case 0 :
 						{		// Child Process
                                 setpgrp();
+
+								cout << "We do get here" << endl;
+                                if(execvp(args[0],args)<0){
+									exit(1);
+                                }
+						}
+
+                       default:
 								jobStatus status = working;
                                 char* procc_name = (char*)malloc(sizeof(char)*strlen(args[0]));
                                 strcpy(procc_name,args[0]);
 								int my_pID = (int)getpid();
                                 job new_job(my_pID, status, procc_name);
                                 job_list.push_back(new_job);
-								cout << "We do get here" << endl;
-                                if(execvp(args[0],args)<0){
-                                printf("Unknown command: %s\n", cmd);
-								job Free_this = job_list.back();
-								free(Free_this.GetName());
-								job_list.pop_back();
-                                exit(1);
-                                }
-						}
-
-                       default:
                                 return(0);
+								if(kill(pID,0) ==0){}
+								else if (errno == ESRCH) //NO SUCH PROCESS
+								{
+									printf("Unknown command: %s\n", cmd);
+									job Free_this = job_list.back();
+									free(Free_this.GetName());
+									job_list.pop_back();
+								}
+								else
+								{
+									printf("Unknown command: %s\n", cmd);
+									job Free_this = job_list.back();
+									free(Free_this.GetName());
+									job_list.pop_back();
+								}
 
                 }
 	}
