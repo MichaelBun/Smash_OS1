@@ -111,6 +111,7 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list, char* fwd,
 	{
         if(num_arg!=2){
             cout<<"Num of parameters is wrong"<<endl;
+            return -1;
         }
         for(std::list<Var*>::iterator i = var_list.begin(); i!=var_list.end(); i++) //check if var alreardy in list
             {
@@ -208,14 +209,20 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list, char* fwd,
 	/*************************************************/
 	else if (!strcmp(cmd, "kill"))
 	{
+        if(num_arg!=2){
+            cout<<"Num of parameters is wrong"<<endl;
+            return -1;
+        }
 		int job_num = atoi(args[2]);
-   		if(job_num>job_list.size()) // job does not exist
+
+   		if(job_num>job_list.size() || job_list.empty() == true) // job does not exist
 		{
-			printf("smash error: > kill %s – job does not exist",args[2]);
+			printf("smash error: > kill %s – job does not exist\n",args[2]);
 		}
 		else
 		{
 			int system_call;
+			//TODO what if signum is not int
 			system_call = (-1)*atoi(args[1]);
 			int counter = 1;
 			for(std::list<job>::iterator i = job_list.begin(); i!=job_list.end(); i++)
@@ -224,19 +231,18 @@ int ExeCmd(char* lineSize, list<Var*>& var_list, list<job>& job_list, char* fwd,
 				{
 					if(kill((*i).GetPid(),system_call) == -1) // we failed in sending the sig
 					{
-						printf("smash error: > kill %s – cannot send signal",args[2]);
+						printf("smash error: > kill %s – cannot send signal\n",args[2]);
 					}
 					else
 					{
 						if(system_call == SIGSTOP || system_call == SIGTSTP) //We want to suspend
 						{
-							jobStatus new_status = suspended; //This process is now suspended
-							(*i).ChangeStatus(new_status);
+							 //This process is now suspended
+							(*i).ChangeStatus(suspended);
 						}
 						else if(system_call == SIGCONT)
 						{
-							jobStatus new_status = working; //This process is now suspended
-							(*i).ChangeStatus(new_status);
+							(*i).ChangeStatus(working);
 						}
 						else if(system_call == SIGKILL || system_call == SIGQUIT) // We want to delete the item from the job list
 						{
@@ -544,5 +550,16 @@ int BgCmd(char *linesize, list<job>& job_list)
                 }
 	}
 	return -1;
+}
+
+void remove_elem_from_jobs(int elem_num){
+    int counter = 1;
+    for(std::list<job>::iterator i = job_list.begin(); i!=job_list.end(); i++)
+    {
+        if(counter == elem_num){
+            free((*i).GetName());
+            job_list.erase(i);
+        }
+    }
 }
 
